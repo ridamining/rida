@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIDA Protocol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0b0e11; color: #fff; font-family: sans-serif; }
+        .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; }
+        .btn-mine { background: linear-gradient(135deg, #3b82f6, #1d4ed8); transition: 0.3s; }
+        .btn-mine:active { transform: scale(0.9); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="p-4 max-w-md mx-auto">
+    <div id="auth">
+        <h1 class="text-3xl font-bold text-center mt-10 mb-8 text-blue-500">RIDA</h1>
+        <div class="glass p-6" id="login-box">
+            <input type="email" id="email" placeholder="Email" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none">
+            <input type="password" id="pass" placeholder="Password" class="w-full bg-white/10 p-4 rounded-xl mb-6 outline-none">
+            <button onclick="login()" class="w-full btn-mine py-4 rounded-xl font-bold">Login</button>
+            <p class="text-center mt-4 text-sm text-gray-400">No account? <button onclick="toggle()" class="text-blue-400">Register</button></p>
+        </div>
+        <div class="glass p-6 hidden" id="reg-box">
+            <input type="text" id="r-user" placeholder="Username" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none">
+            <input type="email" id="r-email" placeholder="Email" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none">
+            <input type="password" id="r-pass" placeholder="Password" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none">
+            <input type="text" id="r-ref" placeholder="Referral Code (Optional)" class="w-full bg-white/10 p-4 rounded-xl mb-6 outline-none">
+            <button onclick="reg()" class="w-full bg-green-600 py-4 rounded-xl font-bold">Sign Up</button>
+            <p class="text-center mt-4 text-sm text-gray-400">Have an account? <button onclick="toggle()" class="text-blue-400">Login</button></p>
+        </div>
+    </div>
+
+    <div id="dash" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 id="u-name" class="font-bold">User</h2>
+            <div id="u-ref" class="text-xs text-blue-400 font-mono"></div>
+        </div>
+        <div class="glass p-8 text-center mb-6">
+            <p class="text-gray-400 text-sm">BALANCE</p>
+            <h1 class="text-4xl font-black mt-2"><span id="u-bal">0</span> RIDA</h1>
+        </div>
+        <div class="flex justify-center my-12">
+            <button id="m-btn" onclick="mine()" class="btn-mine w-36 h-36 rounded-full flex flex-col items-center justify-center border-4 border-blue-900 shadow-xl">
+                <span class="font-bold">MINE</span>
+                <span id="m-timer" class="text-[10px] opacity-70">READY</span>
+            </button>
+        </div>
+        <div class="glass p-4 text-center">
+            <p class="text-xs text-gray-400">REFERRALS: <span id="u-rcnt">0</span></p>
+            <button onclick="copyRef()" class="text-blue-400 text-xs mt-2 underline">Copy Link</button>
+        </div>
+    </div>
+
+    <script>
+        const API = "https://script.google.com/macros/s/AKfycbx4h7qCvqjKpHfoCQq9kU7fIP6jbcghG_yLKvmu0XI5GBaRykNh5gbyKw76qV21kw2J/exec"; // REPLACE THIS
+        let user = null;
+
+        function toggle() {
+            document.getElementById('login-box').classList.toggle('hidden');
+            document.getElementById('reg-box').classList.toggle('hidden');
+        }
+
+        async function reg() {
+            const body = { action: 'register', username: document.getElementById('r-user').value, email: document.getElementById('r-email').value, password: document.getElementById('r-pass').value, referredBy: document.getElementById('r-ref').value };
+            const res = await fetch(API, { method: 'POST', body: JSON.stringify(body) });
+            const d = await res.json();
+            alert(d.message);
+            if(d.message === "Success") toggle();
+        }
+
+        async function login() {
+            const body = { action: 'login', email: document.getElementById('email').value, password: document.getElementById('pass').value };
+            const res = await fetch(API, { method: 'POST', body: JSON.stringify(body) });
+            const d = await res.json();
+            if(d.message === "Success") {
+                user = d;
+                document.getElementById('auth').classList.add('hidden');
+                document.getElementById('dash').classList.remove('hidden');
+                update();
+            } else { alert(d.message); }
+        }
+
+        async function mine() {
+            const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'mine', username: user.username }) });
+            const d = await res.json();
+            if(d.message === "Success") {
+                user.balance = d.newBalance;
+                user.lastMining = new Date().getTime();
+                update();
+            } else { alert(d.message); }
+        }
+
+        function update() {
+            document.getElementById('u-name').innerText = user.username;
+            document.getElementById('u-bal').innerText = user.balance;
+            document.getElementById('u-ref').innerText = "REF: " + user.refCode;
+            document.getElementById('u-rcnt').innerText = user.refCount;
+            const diff = 24*60*60*1000 - (new Date().getTime() - (user.lastMining || 0));
+            document.getElementById('m-btn').disabled = diff > 0;
+            document.getElementById('m-timer').innerText = diff > 0 ? "MINING..." : "READY";
+        }
+
+        function copyRef() {
+            navigator.clipboard.writeText(window.location.origin + window.location.pathname + "?ref=" + user.refCode);
+            alert("Copied!");
+        }
+    </script>
+</body>
+</html>
