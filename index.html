@@ -1,101 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIDA Mining</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; }
-        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; }
-        .mine-btn { background: #3b82f6; box-shadow: 0 0 20px rgba(59,130,246,0.5); transition: 0.3s; }
-        .mine-btn:active { transform: scale(0.9); }
-        .hidden { display: none; }
-    </style>
-</head>
-<body class="p-6 max-w-md mx-auto">
+<script>
+const API = "https://script.google.com/macros/s/AKfycbz9WrOIa_rAuS3bkbx0RhocemlHb-MlynWdpxRevVi313FoonK9ZLiWFx1-ZpxvFKPg/exec"; 
 
-    <div id="auth-screen">
-        <h1 class="text-4xl font-bold text-center mt-10 mb-2 text-blue-500">RIDA</h1>
-        <p class="text-center text-xs text-gray-400 mb-10">COMMUNITY PROTOCOL</p>
-        
-        <div class="glass p-6" id="login-box">
-            <input type="email" id="email" placeholder="Email" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none border border-white/5">
-            <input type="password" id="pass" placeholder="Password" class="w-full bg-white/10 p-4 rounded-xl mb-6 outline-none border border-white/5">
-            <button onclick="handleAuth('login')" class="w-full bg-blue-600 py-4 rounded-xl font-bold">Login</button>
-            <p class="text-center mt-6 text-sm text-gray-400">New? <span onclick="toggle()" class="text-blue-400 cursor-pointer">Create Account</span></p>
-        </div>
+let user = JSON.parse(localStorage.getItem("user"));
 
-        <div class="glass p-6 hidden" id="reg-box">
-            <input type="text" id="r-user" placeholder="Username" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none border border-white/5">
-            <input type="email" id="r-email" placeholder="Email" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none border border-white/5">
-            <input type="password" id="r-pass" placeholder="Password" class="w-full bg-white/10 p-4 rounded-xl mb-4 outline-none border border-white/5">
-            <input type="text" id="r-ref" placeholder="Referral Code (Optional)" class="w-full bg-white/10 p-4 rounded-xl mb-6 outline-none border border-white/5">
-            <button onclick="handleAuth('register')" class="w-full bg-green-600 py-4 rounded-xl font-bold">Sign Up</button>
-            <p class="text-center mt-6 text-sm text-gray-400">Back to <span onclick="toggle()" class="text-blue-400 cursor-pointer">Login</span></p>
-        </div>
-    </div>
+// ================= TOGGLE =================
+function toggle() {
+    document.getElementById('login-box').classList.toggle('hidden');
+    document.getElementById('reg-box').classList.toggle('hidden');
+}
 
-    <div id="dash-screen" class="hidden">
-        <div class="flex justify-between items-center mb-8">
-            <h2 id="disp-user" class="font-bold text-lg">---</h2>
-            <div id="disp-ref" class="text-[10px] bg-blue-900/50 px-3 py-1 rounded-full text-blue-300">REF: ---</div>
-        </div>
-        <div class="glass p-8 text-center mb-8">
-            <p class="text-gray-400 text-xs tracking-widest mb-2">TOTAL RIDA</p>
-            <h1 class="text-5xl font-black"><span id="disp-bal">0</span></h1>
-        </div>
-        <div class="flex justify-center mb-10">
-            <button id="mine-btn" onclick="mineNow()" class="mine-btn w-40 h-40 rounded-full flex flex-col items-center justify-center border-8 border-blue-900/50">
-                <span class="text-2xl font-black">MINE</span>
-                <span id="mine-timer" class="text-[10px] opacity-70">READY</span>
-            </button>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div class="glass p-4 text-center">
-                <p class="text-[10px] text-gray-400">REFERRALS</p>
-                <p id="disp-rcnt" class="text-xl font-bold">0</p>
-            </div>
-            <div class="glass p-4 text-center">
-                <p class="text-[10px] text-gray-400">STATUS</p>
-                <p class="text-xl font-bold text-green-500 text-sm">ACTIVE</p>
-            </div>
-        </div>
-    </div>
+// ================= AUTH =================
+async function handleAuth(type) {
+    const data = type === 'login' ? 
+        {
+            action: 'login',
+            email: document.getElementById('email').value,
+            password: document.getElementById('pass').value
+        } :
+        {
+            action: 'register',
+            username: document.getElementById('r-user').value,
+            email: document.getElementById('r-email').value,
+            password: document.getElementById('r-pass').value,
+            referredBy: document.getElementById('r-ref').value
+        };
 
-    <script>
-        // PASTE YOUR GOOGLE WEB APP URL BELOW
-        const API = "https://script.google.com/macros/s/AKfycbz9WrOIa_rAuS3bkbx0RhocemlHb-MlynWdpxRevVi313FoonK9ZLiWFx1-ZpxvFKPg/exec"; 
-        let user = null;
+    try {
+        const res = await fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-        function toggle() {
-            document.getElementById('login-box').classList.toggle('hidden');
-            document.getElementById('reg-box').classList.toggle('hidden');
-        }
+        const result = await res.json();
 
-        async function handleAuth(type) {
-            const data = type === 'login' ? 
-                { action: 'login', email: document.getElementById('email').value, password: document.getElementById('pass').value } :
-                { action: 'register', username: document.getElementById('r-user').value, email: document.getElementById('r-email').value, password: document.getElementById('r-pass').value, referredBy: document.getElementById('r-ref').value };
-
-            // We use no-cors to bypass browser security on mobile
-            await fetch(API, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) });
-
-            alert("Request sent! Checking database...");
-            if(type === 'login') {
-                // Since no-cors can't read response, we wait and try a secondary fetch or just ask user to refresh
-                alert("If details are correct, refresh to enter dashboard.");
-                location.reload(); 
-            } else {
-                alert("Registered! Now try logging in.");
+        // ===== REGISTER =====
+        if (type === 'register') {
+            if (result.status === "success") {
+                alert("Registered Successfully ✅");
                 toggle();
+            } else if (result.status === "exists") {
+                alert("Email already exists ❌");
+            } else {
+                alert("Registration failed ❌");
             }
         }
 
-        async function mineNow() {
-            await fetch(API, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'mine', username: user.username }) });
-            alert("Mining request sent! Balance updates on next login.");
+        // ===== LOGIN =====
+        if (type === 'login') {
+            if (result.status === "success") {
+                localStorage.setItem("user", JSON.stringify(result.data));
+                loadDashboard();
+            } else {
+                alert("Invalid login ❌");
+            }
         }
-    </script>
-</body>
-</html>
+
+    } catch (err) {
+        console.error(err);
+        alert("Server error ❌");
+    }
+}
+
+// ================= LOAD DASHBOARD =================
+function loadDashboard() {
+    user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) return;
+
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('dash-screen').classList.remove('hidden');
+
+    document.getElementById('disp-user').innerText = user.username;
+    document.getElementById('disp-ref').innerText = "REF: " + user.refCode;
+    document.getElementById('disp-bal').innerText = user.balance;
+    document.getElementById('disp-rcnt').innerText = user.refCount;
+}
+
+// ================= AUTO LOGIN =================
+window.onload = function () {
+    if (user) {
+        loadDashboard();
+    }
+};
+
+// ================= MINING =================
+async function mineNow() {
+    if (!user) return;
+
+    await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'mine',
+            username: user.username
+        })
+    });
+
+    alert("Mining request sent ⛏️");
+}
+
+// ================= LOGOUT =================
+function logout() {
+    localStorage.removeItem("user");
+    location.reload();
+}
+</script>
