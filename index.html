@@ -95,8 +95,8 @@
 
 <script>
   // ========== CONFIGURATION ==========
-  // Your fresh Apps Script Web App URL
-  const API_URL = 'https://script.google.com/macros/s/AKfycbzkxd3K1nErmXZw_QbVf39ud0jxcWKfe9Q5TDNiMM_pYZO7YfwgWeIjmKTGBslFabIRUQ/exec';
+  // Your final working Web App URL
+  const API_URL = 'https://script.google.com/macros/s/AKfycbw4TC43bCmRBBw-t1em_ABGlvvUmgE1gwIinnE0_rdraFXZQ7RW9lR3Y5HbJa1HPEeM/exec';
 
   async function apiCall(action, data = {}) {
     const params = new URLSearchParams({ action, ...data });
@@ -217,7 +217,7 @@
 
   async function loadAnnouncements() {
     const res = await apiCall('getAnnouncements');
-    if (res.success && res.announcements.length) {
+    if (res.success && res.announcements && res.announcements.length) {
       announcementsList.innerHTML = res.announcements.map(a => `
         <div class="border-l-4 border-blue-500 pl-3 py-1">
           <p class="text-xs text-gray-400">${new Date(a.date).toLocaleString()}</p>
