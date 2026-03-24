@@ -4,12 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>RIDA Mining | Crypto Mining Platform</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* Same styles as before */
     .glass-card {
       background: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(12px);
@@ -44,332 +41,282 @@
   </style>
 </head>
 <body class="text-gray-200 font-sans">
-  <div class="container mx-auto px-4 py-6 max-w-5xl">
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
-        RIDA Mining
-      </h1>
-      <p class="text-blue-300/70 text-sm mt-1">Mine RIDA tokens, refer friends, and grow your wealth</p>
-    </div>
 
-    <div id="authContainer" class="flex justify-center">
-      <div class="w-full max-w-md glass-card p-6">
-        <div class="flex space-x-4 mb-6 border-b border-blue-500/30">
-          <button id="loginTabBtn" class="tab-btn py-2 px-4 text-blue-400 border-b-2 border-blue-400 font-medium">Login</button>
-          <button id="registerTabBtn" class="tab-btn py-2 px-4 text-gray-400 hover:text-blue-300">Register</button>
-        </div>
-        
-        <div id="loginForm" class="space-y-4">
-          <div>
-            <label class="block text-sm mb-1">Email</label>
-            <input type="email" id="loginEmail" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="your@email.com">
-          </div>
-          <div>
-            <label class="block text-sm mb-1">Password</label>
-            <input type="password" id="loginPassword" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="••••••••">
-          </div>
-          <button id="loginBtn" class="w-full neon-button py-3 rounded-lg font-bold text-white">Login</button>
-        </div>
-        
-        <div id="registerForm" class="space-y-4 hidden">
-          <div>
-            <label class="block text-sm mb-1">Username</label>
-            <input type="text" id="regUsername" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="crypto_miner">
-          </div>
-          <div>
-            <label class="block text-sm mb-1">Email</label>
-            <input type="email" id="regEmail" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="your@email.com">
-          </div>
-          <div>
-            <label class="block text-sm mb-1">Password</label>
-            <input type="password" id="regPassword" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="••••••••">
-          </div>
-          <div>
-            <label class="block text-sm mb-1">Referral Code (optional)</label>
-            <input type="text" id="regReferral" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="e.g., ABC123">
-          </div>
-          <button id="registerBtn" class="w-full neon-button py-3 rounded-lg font-bold text-white">Create Account</button>
-        </div>
-        <div id="authMessage" class="mt-4 text-sm text-center"></div>
-      </div>
-    </div>
+<div class="container mx-auto px-4 py-6 max-w-5xl">
+  <div class="text-center mb-8">
+    <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+      RIDA Mining
+    </h1>
+    <p class="text-blue-300/70 text-sm mt-1">Mine RIDA tokens, refer friends, and grow your wealth</p>
+  </div>
 
-    <div id="dashboard" class="hidden space-y-6">
-      <!-- Dashboard content same as before -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="glass-card p-5 text-center">
-          <i class="fas fa-user text-blue-400 text-2xl mb-2"></i>
-          <p class="text-gray-400 text-sm">Username</p>
-          <p id="dashboardUsername" class="text-xl font-bold">-</p>
-        </div>
-        <div class="glass-card p-5 text-center">
-          <i class="fas fa-coins text-yellow-400 text-2xl mb-2"></i>
-          <p class="text-gray-400 text-sm">Balance (RIDA)</p>
-          <p id="dashboardBalance" class="text-2xl font-bold text-green-400">0.000</p>
-        </div>
-        <div class="glass-card p-5 text-center">
-          <i class="fas fa-users text-blue-400 text-2xl mb-2"></i>
-          <p class="text-gray-400 text-sm">Referrals</p>
-          <p id="dashboardRefCount" class="text-xl font-bold">0</p>
-        </div>
+  <!-- Auth Container -->
+  <div id="authContainer" class="flex justify-center">
+    <div class="w-full max-w-md glass-card p-6">
+      <div class="flex space-x-4 mb-6 border-b border-blue-500/30">
+        <button id="loginTabBtn" class="tab-btn py-2 px-4 text-blue-400 border-b-2 border-blue-400 font-medium">Login</button>
+        <button id="registerTabBtn" class="tab-btn py-2 px-4 text-gray-400 hover:text-blue-300">Register</button>
       </div>
-      <div class="glass-card p-5">
-        <h3 class="text-lg font-semibold mb-2"><i class="fas fa-link mr-2"></i>Your Referral Link</h3>
-        <div class="flex flex-wrap gap-2 items-center">
-          <code id="referralLink" class="bg-gray-800 p-2 rounded text-sm flex-1 break-all"></code>
-          <button id="copyLinkBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm">Copy</button>
-        </div>
+      <div id="loginForm" class="space-y-4">
+        <div><label class="block text-sm mb-1">Email</label><input type="email" id="loginEmail" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="your@email.com"></div>
+        <div><label class="block text-sm mb-1">Password</label><input type="password" id="loginPassword" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="••••••••"></div>
+        <button id="loginBtn" class="w-full neon-button py-3 rounded-lg font-bold text-white">Login</button>
       </div>
-      <div class="glass-card p-6 text-center">
-        <h3 class="text-xl font-bold mb-3">Mining Console</h3>
-        <button id="mineBtn" class="mine-button text-white font-bold py-3 px-8 rounded-full text-xl w-full md:w-auto">⛏️ MINE NOW</button>
-        <div id="mineStatus" class="mt-3 text-sm text-gray-300"></div>
-        <div id="cooldownTimer" class="mt-2 text-xs text-blue-300 font-mono"></div>
+      <div id="registerForm" class="space-y-4 hidden">
+        <div><label class="block text-sm mb-1">Username</label><input type="text" id="regUsername" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="crypto_miner"></div>
+        <div><label class="block text-sm mb-1">Email</label><input type="email" id="regEmail" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="your@email.com"></div>
+        <div><label class="block text-sm mb-1">Password</label><input type="password" id="regPassword" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="••••••••"></div>
+        <div><label class="block text-sm mb-1">Referral Code (optional)</label><input type="text" id="regReferral" class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-white" placeholder="e.g., ABC123"></div>
+        <button id="registerBtn" class="w-full neon-button py-3 rounded-lg font-bold text-white">Create Account</button>
       </div>
-      <div class="glass-card p-5">
-        <h3 class="text-lg font-semibold mb-3"><i class="fas fa-bullhorn mr-2"></i>Announcements</h3>
-        <div id="announcementsList" class="space-y-2 max-h-60 overflow-y-auto"></div>
-      </div>
-      <div class="text-center"><button id="logoutBtn" class="text-red-400 hover:text-red-300 text-sm underline">Logout</button></div>
+      <div id="authMessage" class="mt-4 text-sm text-center"></div>
     </div>
   </div>
 
-  <script>
-    // ========== CONFIGURATION ==========
-    // Replace with your latest Apps Script URL (the one you deployed)
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxUJKo2M5U_QPjC7-QsDg5Pu2721sDMgk6HleevgBQ1kc5lxUFek2G7fOfaHksr-vvfNg/exec';
-    
-    // Improved fetch with detailed error logging
-    async function apiCall(action, data = {}) {
-      const params = new URLSearchParams({ action, ...data });
-      const url = `${API_URL}?${params.toString()}`;
-      console.log(`Calling ${action} with`, data);
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        });
-        console.log('Response status:', response.status);
-        const text = await response.text();
-        console.log('Raw response:', text);
-        let result;
-        try {
-          result = JSON.parse(text);
-        } catch (e) {
-          console.error('Failed to parse JSON:', e);
-          return { success: false, message: `Server returned invalid JSON: ${text.substring(0, 100)}` };
-        }
-        return result;
-      } catch (error) {
-        console.error('Network error:', error);
-        return { success: false, message: 'Network error: ' + error.message };
-      }
-    }
-    
-    // UI elements (same as before)
-    const authContainer = document.getElementById('authContainer');
-    const dashboardDiv = document.getElementById('dashboard');
-    const loginFormDiv = document.getElementById('loginForm');
-    const registerFormDiv = document.getElementById('registerForm');
-    const loginTab = document.getElementById('loginTabBtn');
-    const registerTab = document.getElementById('registerTabBtn');
-    const authMessage = document.getElementById('authMessage');
-    
-    const dashboardUsername = document.getElementById('dashboardUsername');
-    const dashboardBalance = document.getElementById('dashboardBalance');
-    const dashboardRefCount = document.getElementById('dashboardRefCount');
-    const referralLinkSpan = document.getElementById('referralLink');
-    const mineBtn = document.getElementById('mineBtn');
-    const mineStatus = document.getElementById('mineStatus');
-    const cooldownTimer = document.getElementById('cooldownTimer');
-    const announcementsList = document.getElementById('announcementsList');
-    
-    let currentUser = null;
-    let cooldownInterval = null;
-    
-    loginTab.addEventListener('click', () => {
-      loginFormDiv.classList.remove('hidden');
-      registerFormDiv.classList.add('hidden');
-      loginTab.classList.add('border-b-2', 'border-blue-400', 'text-blue-400');
-      registerTab.classList.remove('border-b-2', 'border-blue-400', 'text-blue-400');
-      registerTab.classList.add('text-gray-400');
-      authMessage.innerHTML = '';
-    });
-    registerTab.addEventListener('click', () => {
-      registerFormDiv.classList.remove('hidden');
-      loginFormDiv.classList.add('hidden');
-      registerTab.classList.add('border-b-2', 'border-blue-400', 'text-blue-400');
-      loginTab.classList.remove('border-b-2', 'border-blue-400', 'text-blue-400');
-      loginTab.classList.add('text-gray-400');
-      authMessage.innerHTML = '';
-    });
-    
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      if (!email || !password) {
-        authMessage.innerHTML = '<span class="text-red-400">All fields required.</span>';
-        return;
-      }
-      authMessage.innerHTML = '<span class="text-blue-400">Logging in...</span>';
-      const result = await apiCall('login', { email, password });
-      if (result.success) {
-        currentUser = result.username;
-        localStorage.setItem('ridaUser', JSON.stringify(result));
-        loadDashboard();
-      } else {
-        authMessage.innerHTML = `<span class="text-red-400">${result.message}</span>`;
-      }
-    });
-    
-    document.getElementById('registerBtn').addEventListener('click', async () => {
-      const username = document.getElementById('regUsername').value.trim();
-      const email = document.getElementById('regEmail').value.trim();
-      const password = document.getElementById('regPassword').value;
-      const referralCode = document.getElementById('regReferral').value.trim();
-      if (!username || !email || !password) {
-        authMessage.innerHTML = '<span class="text-red-400">All fields required.</span>';
-        return;
-      }
-      authMessage.innerHTML = '<span class="text-blue-400">Creating account...</span>';
-      const result = await apiCall('register', { username, email, password, referralCode });
-      if (result.success) {
-        authMessage.innerHTML = '<span class="text-green-400">Registration successful! Please login.</span>';
-        loginTab.click();
-        document.getElementById('loginEmail').value = email;
-        document.getElementById('loginPassword').value = '';
-      } else {
-        authMessage.innerHTML = `<span class="text-red-400">${result.message}</span>`;
-      }
-    });
-    
-    async function loadDashboard() {
-      const stored = localStorage.getItem('ridaUser');
-      if (!stored) return;
-      const user = JSON.parse(stored);
-      currentUser = user.username;
-      const result = await apiCall('getUser', { username: currentUser });
-      if (result.success) {
-        updateDashboardUI(result);
-        localStorage.setItem('ridaUser', JSON.stringify(result));
-        startCooldownTimer(result.lastMineTime);
-      } else {
-        logout();
-      }
-      loadAnnouncements();
-      authContainer.classList.add('hidden');
-      dashboardDiv.classList.remove('hidden');
-    }
-    
-    function updateDashboardUI(data) {
-      dashboardUsername.innerText = data.username;
-      dashboardBalance.innerText = parseFloat(data.balance).toFixed(4);
-      dashboardRefCount.innerText = data.refCount;
-      referralLinkSpan.innerText = `${window.location.origin}?ref=${data.referralCode}`;
-    }
-    
-    async function loadAnnouncements() {
-      const res = await apiCall('getAnnouncements');
-      if (res.success && res.announcements.length) {
-        announcementsList.innerHTML = res.announcements.map(a => `
-          <div class="border-l-4 border-blue-500 pl-3 py-1">
-            <p class="text-xs text-gray-400">${new Date(a.date).toLocaleString()}</p>
-            <p class="font-semibold">${escapeHtml(a.title)}</p>
-            <p class="text-sm text-gray-300">${escapeHtml(a.message)}</p>
-          </div>
-        `).join('');
-      } else {
-        announcementsList.innerHTML = '<p class="text-gray-400 text-sm">No announcements yet.</p>';
-      }
-    }
-    
-    function escapeHtml(str) {
-      if (!str) return '';
-      return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="glass-card p-5 text-center"><i class="fas fa-user text-blue-400 text-2xl mb-2"></i><p class="text-gray-400 text-sm">Username</p><p id="dashboardUsername" class="text-xl font-bold">-</p></div>
+      <div class="glass-card p-5 text-center"><i class="fas fa-coins text-yellow-400 text-2xl mb-2"></i><p class="text-gray-400 text-sm">Balance (RIDA)</p><p id="dashboardBalance" class="text-2xl font-bold text-green-400">0.000</p></div>
+      <div class="glass-card p-5 text-center"><i class="fas fa-users text-blue-400 text-2xl mb-2"></i><p class="text-gray-400 text-sm">Referrals</p><p id="dashboardRefCount" class="text-xl font-bold">0</p></div>
+    </div>
+    <div class="glass-card p-5"><h3 class="text-lg font-semibold mb-2"><i class="fas fa-link mr-2"></i>Your Referral Link</h3>
+      <div class="flex flex-wrap gap-2 items-center"><code id="referralLink" class="bg-gray-800 p-2 rounded text-sm flex-1 break-all"></code><button id="copyLinkBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm">Copy</button></div>
+      <p class="text-xs text-gray-400 mt-2">Share this code – you'll earn when they join!</p>
+    </div>
+    <div class="glass-card p-6 text-center"><h3 class="text-xl font-bold mb-3">Mining Console</h3>
+      <button id="mineBtn" class="mine-button text-white font-bold py-3 px-8 rounded-full text-xl w-full md:w-auto transition-all">⛏️ MINE NOW</button>
+      <div id="mineStatus" class="mt-3 text-sm text-gray-300"></div><div id="cooldownTimer" class="mt-2 text-xs text-blue-300 font-mono"></div>
+    </div>
+    <div class="glass-card p-5"><h3 class="text-lg font-semibold mb-3"><i class="fas fa-bullhorn mr-2"></i>Announcements</h3><div id="announcementsList" class="space-y-2 max-h-60 overflow-y-auto"></div></div>
+    <div class="text-center"><button id="logoutBtn" class="text-red-400 hover:text-red-300 text-sm underline">Logout</button></div>
+  </div>
+</div>
+
+<script>
+  // ========== CONFIGURATION ==========
+  // Your new Apps Script Web App URL
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzzlxBk4N4NS1bT-NOAvtOXLv6dng7fu-As1BO1tgtele7aWl4qGUkuT7y2gmUIRCq-TQ/exec';
+
+  async function apiCall(action, data = {}) {
+    const params = new URLSearchParams({ action, ...data });
+    try {
+      const response = await fetch(`${API_URL}?${params.toString()}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error(error);
+      return { success: false, message: 'Connection error: ' + error.message };
     }
-    
-    mineBtn.addEventListener('click', async () => {
-      if (!currentUser) return;
-      mineBtn.disabled = true;
-      mineStatus.innerText = 'Mining in progress...';
-      const result = await apiCall('mine', { username: currentUser });
-      if (result.success) {
-        mineStatus.innerText = `Success! You earned ${result.reward} RIDA.`;
-        const user = JSON.parse(localStorage.getItem('ridaUser'));
-        user.balance = result.balance;
-        user.lastMineTime = result.lastMineTime;
-        localStorage.setItem('ridaUser', JSON.stringify(user));
-        dashboardBalance.innerText = parseFloat(result.balance).toFixed(4);
-        startCooldownTimer(result.lastMineTime);
-      } else {
-        mineStatus.innerText = result.message;
-        if (result.message.includes('Cooldown')) {
-          const fresh = await apiCall('getUser', { username: currentUser });
-          if (fresh.success) startCooldownTimer(fresh.lastMineTime);
-        }
-      }
-      setTimeout(() => { mineStatus.innerText = ''; }, 3000);
-      mineBtn.disabled = false;
-    });
-    
-    function startCooldownTimer(lastMineTimeStr) {
-      if (cooldownInterval) clearInterval(cooldownInterval);
-      if (!lastMineTimeStr) {
-        mineBtn.disabled = false;
-        cooldownTimer.innerText = '';
-        return;
-      }
-      const lastMine = new Date(lastMineTimeStr);
-      const cooldownMs = 24 * 60 * 60 * 1000;
-      const updateTimer = () => {
-        const now = new Date();
-        const diff = cooldownMs - (now - lastMine);
-        if (diff <= 0) {
-          mineBtn.disabled = false;
-          cooldownTimer.innerText = 'Ready to mine!';
-          clearInterval(cooldownInterval);
-        } else {
-          mineBtn.disabled = true;
-          const hours = Math.floor(diff / (1000 * 60 * 60));
-          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-          cooldownTimer.innerText = `Cooldown: ${hours}h ${minutes}m ${seconds}s`;
-        }
-      };
-      updateTimer();
-      cooldownInterval = setInterval(updateTimer, 1000);
+  }
+
+  // UI elements
+  const authContainer = document.getElementById('authContainer');
+  const dashboardDiv = document.getElementById('dashboard');
+  const loginFormDiv = document.getElementById('loginForm');
+  const registerFormDiv = document.getElementById('registerForm');
+  const loginTab = document.getElementById('loginTabBtn');
+  const registerTab = document.getElementById('registerTabBtn');
+  const authMessage = document.getElementById('authMessage');
+  const dashboardUsername = document.getElementById('dashboardUsername');
+  const dashboardBalance = document.getElementById('dashboardBalance');
+  const dashboardRefCount = document.getElementById('dashboardRefCount');
+  const referralLinkSpan = document.getElementById('referralLink');
+  const mineBtn = document.getElementById('mineBtn');
+  const mineStatus = document.getElementById('mineStatus');
+  const cooldownTimer = document.getElementById('cooldownTimer');
+  const announcementsList = document.getElementById('announcementsList');
+
+  let currentUser = null;
+  let cooldownInterval = null;
+
+  loginTab.addEventListener('click', () => {
+    loginFormDiv.classList.remove('hidden');
+    registerFormDiv.classList.add('hidden');
+    loginTab.classList.add('border-b-2', 'border-blue-400', 'text-blue-400');
+    registerTab.classList.remove('border-b-2', 'border-blue-400', 'text-blue-400');
+    registerTab.classList.add('text-gray-400');
+    authMessage.innerHTML = '';
+  });
+  registerTab.addEventListener('click', () => {
+    registerFormDiv.classList.remove('hidden');
+    loginFormDiv.classList.add('hidden');
+    registerTab.classList.add('border-b-2', 'border-blue-400', 'text-blue-400');
+    loginTab.classList.remove('border-b-2', 'border-blue-400', 'text-blue-400');
+    loginTab.classList.add('text-gray-400');
+    authMessage.innerHTML = '';
+  });
+
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) {
+      authMessage.innerHTML = '<span class="text-red-400">All fields required.</span>';
+      return;
     }
-    
-    document.getElementById('copyLinkBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(referralLinkSpan.innerText);
-      alert('Referral link copied!');
-    });
-    
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-    function logout() {
-      localStorage.removeItem('ridaUser');
-      currentUser = null;
-      if (cooldownInterval) clearInterval(cooldownInterval);
-      authContainer.classList.remove('hidden');
-      dashboardDiv.classList.add('hidden');
-      document.getElementById('loginEmail').value = '';
+    authMessage.innerHTML = '<span class="text-blue-400">Logging in...</span>';
+    const result = await apiCall('login', { email, password });
+    if (result.success) {
+      currentUser = result.username;
+      localStorage.setItem('ridaUser', JSON.stringify(result));
+      loadDashboard();
+    } else {
+      authMessage.innerHTML = `<span class="text-red-400">${result.message}</span>`;
+    }
+  });
+
+  document.getElementById('registerBtn').addEventListener('click', async () => {
+    const username = document.getElementById('regUsername').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const referralCode = document.getElementById('regReferral').value.trim();
+    if (!username || !email || !password) {
+      authMessage.innerHTML = '<span class="text-red-400">All fields required.</span>';
+      return;
+    }
+    authMessage.innerHTML = '<span class="text-blue-400">Creating account...</span>';
+    const result = await apiCall('register', { username, email, password, referralCode });
+    if (result.success) {
+      authMessage.innerHTML = '<span class="text-green-400">Registration successful! Please login.</span>';
+      loginTab.click();
+      document.getElementById('loginEmail').value = email;
       document.getElementById('loginPassword').value = '';
-      document.getElementById('regUsername').value = '';
-      document.getElementById('regEmail').value = '';
-      document.getElementById('regPassword').value = '';
-      document.getElementById('regReferral').value = '';
-      authMessage.innerHTML = '';
+    } else {
+      authMessage.innerHTML = `<span class="text-red-400">${result.message}</span>`;
     }
-    
-    (function init() {
-      const stored = localStorage.getItem('ridaUser');
-      if (stored) loadDashboard();
-    })();
-  </script>
+  });
+
+  async function loadDashboard() {
+    const stored = localStorage.getItem('ridaUser');
+    if (!stored) return;
+    const user = JSON.parse(stored);
+    currentUser = user.username;
+    const result = await apiCall('getUser', { username: currentUser });
+    if (result.success) {
+      updateDashboardUI(result);
+      localStorage.setItem('ridaUser', JSON.stringify(result));
+      startCooldownTimer(result.lastMineTime);
+    } else {
+      logout();
+    }
+    loadAnnouncements();
+    authContainer.classList.add('hidden');
+    dashboardDiv.classList.remove('hidden');
+  }
+
+  function updateDashboardUI(data) {
+    dashboardUsername.innerText = data.username;
+    dashboardBalance.innerText = parseFloat(data.balance).toFixed(4);
+    dashboardRefCount.innerText = data.refCount;
+    referralLinkSpan.innerText = `${window.location.origin}?ref=${data.referralCode}`;
+  }
+
+  async function loadAnnouncements() {
+    const res = await apiCall('getAnnouncements');
+    if (res.success && res.announcements.length) {
+      announcementsList.innerHTML = res.announcements.map(a => `
+        <div class="border-l-4 border-blue-500 pl-3 py-1">
+          <p class="text-xs text-gray-400">${new Date(a.date).toLocaleString()}</p>
+          <p class="font-semibold">${escapeHtml(a.title)}</p>
+          <p class="text-sm text-gray-300">${escapeHtml(a.message)}</p>
+        </div>
+      `).join('');
+    } else {
+      announcementsList.innerHTML = '<p class="text-gray-400 text-sm">No announcements yet.</p>';
+    }
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  mineBtn.addEventListener('click', async () => {
+    if (!currentUser) return;
+    mineBtn.disabled = true;
+    mineStatus.innerText = 'Mining in progress...';
+    const result = await apiCall('mine', { username: currentUser });
+    if (result.success) {
+      mineStatus.innerText = `Success! You earned ${result.reward} RIDA.`;
+      const user = JSON.parse(localStorage.getItem('ridaUser'));
+      user.balance = result.balance;
+      user.lastMineTime = result.lastMineTime;
+      localStorage.setItem('ridaUser', JSON.stringify(user));
+      dashboardBalance.innerText = parseFloat(result.balance).toFixed(4);
+      startCooldownTimer(result.lastMineTime);
+    } else {
+      mineStatus.innerText = result.message;
+      if (result.message.includes('Cooldown')) {
+        const fresh = await apiCall('getUser', { username: currentUser });
+        if (fresh.success) startCooldownTimer(fresh.lastMineTime);
+      }
+    }
+    setTimeout(() => { mineStatus.innerText = ''; }, 3000);
+    mineBtn.disabled = false;
+  });
+
+  function startCooldownTimer(lastMineTimeStr) {
+    if (cooldownInterval) clearInterval(cooldownInterval);
+    if (!lastMineTimeStr) {
+      mineBtn.disabled = false;
+      cooldownTimer.innerText = '';
+      return;
+    }
+    const lastMine = new Date(lastMineTimeStr);
+    const cooldownMs = 24 * 60 * 60 * 1000;
+    const updateTimer = () => {
+      const now = new Date();
+      const diff = cooldownMs - (now - lastMine);
+      if (diff <= 0) {
+        mineBtn.disabled = false;
+        cooldownTimer.innerText = 'Ready to mine!';
+        clearInterval(cooldownInterval);
+      } else {
+        mineBtn.disabled = true;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        cooldownTimer.innerText = `Cooldown: ${hours}h ${minutes}m ${seconds}s`;
+      }
+    };
+    updateTimer();
+    cooldownInterval = setInterval(updateTimer, 1000);
+  }
+
+  document.getElementById('copyLinkBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(referralLinkSpan.innerText);
+    alert('Referral link copied!');
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+  function logout() {
+    localStorage.removeItem('ridaUser');
+    currentUser = null;
+    if (cooldownInterval) clearInterval(cooldownInterval);
+    authContainer.classList.remove('hidden');
+    dashboardDiv.classList.add('hidden');
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('regUsername').value = '';
+    document.getElementById('regEmail').value = '';
+    document.getElementById('regPassword').value = '';
+    document.getElementById('regReferral').value = '';
+    authMessage.innerHTML = '';
+  }
+
+  (function init() {
+    const stored = localStorage.getItem('ridaUser');
+    if (stored) loadDashboard();
+  })();
+</script>
 </body>
-</html>
+  </html>
