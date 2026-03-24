@@ -98,6 +98,24 @@
   // Your final working Web App URL
   const API_URL = 'https://script.google.com/macros/s/AKfycbw4TC43bCmRBBw-t1em_ABGlvvUmgE1gwIinnE0_rdraFXZQ7RW9lR3Y5HbJa1HPEeM/exec';
 
+  // Function to get query parameter from URL
+  function getUrlParameter(name) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    const results = regex.exec(window.location.href);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
+  // Prefill referral code if present in URL
+  const referralFromUrl = getUrlParameter('ref');
+  if (referralFromUrl) {
+    document.getElementById('regReferral').value = referralFromUrl;
+    // Optionally show a message
+    console.log('Referral code pre-filled:', referralFromUrl);
+  }
+
   async function apiCall(action, data = {}) {
     const params = new URLSearchParams({ action, ...data });
     try {
