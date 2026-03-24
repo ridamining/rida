@@ -201,7 +201,7 @@
     const cooldownTimer = document.getElementById('cooldownTimer');
     const announcementsList = document.getElementById('announcementsList');
     
-    let currentUser = null; // stores username
+    let currentUser = null;
     let cooldownInterval = null;
     
     // Toggle between login/register forms
@@ -234,7 +234,13 @@
       const result = await apiCall('login', { email, password });
       if (result.success) {
         currentUser = result.username;
-        localStorage.setItem('ridaUser', JSON.stringify({ username: result.username, balance: result.balance, referralCode: result.referralCode, refCount: result.refCount, lastMineTime: result.lastMineTime }));
+        localStorage.setItem('ridaUser', JSON.stringify({
+          username: result.username,
+          balance: result.balance,
+          referralCode: result.referralCode,
+          refCount: result.refCount,
+          lastMineTime: result.lastMineTime
+        }));
         loadDashboard();
       } else {
         authMessage.innerHTML = `<span class="text-red-400">${result.message}</span>`;
@@ -275,7 +281,13 @@
       const result = await apiCall('getUser', { username: currentUser });
       if (result.success) {
         updateDashboardUI(result);
-        localStorage.setItem('ridaUser', JSON.stringify({ username: result.username, balance: result.balance, referralCode: result.referralCode, refCount: result.refCount, lastMineTime: result.lastMineTime }));
+        localStorage.setItem('ridaUser', JSON.stringify({
+          username: result.username,
+          balance: result.balance,
+          referralCode: result.referralCode,
+          refCount: result.refCount,
+          lastMineTime: result.lastMineTime
+        }));
         startCooldownTimer(result.lastMineTime);
       } else {
         logout();
@@ -293,8 +305,8 @@
       dashboardUsername.innerText = data.username;
       dashboardBalance.innerText = parseFloat(data.balance).toFixed(4);
       dashboardRefCount.innerText = data.refCount;
-      const baseUrl = window.location.origin + window.location.pathname;
-      referralLinkSpan.innerText = `${data.referralCode}`;
+      // Show the full referral link for easier copying
+      referralLinkSpan.innerText = `${window.location.origin}?ref=${data.referralCode}`;
     }
     
     async function loadAnnouncements() {
@@ -303,13 +315,23 @@
         announcementsList.innerHTML = res.announcements.map(a => `
           <div class="border-l-4 border-blue-500 pl-3 py-1">
             <p class="text-xs text-gray-400">${new Date(a.date).toLocaleString()}</p>
-            <p class="font-semibold">${a.title}</p>
-            <p class="text-sm text-gray-300">${a.message}</p>
+            <p class="font-semibold">${escapeHtml(a.title)}</p>
+            <p class="text-sm text-gray-300">${escapeHtml(a.message)}</p>
           </div>
         `).join('');
       } else {
         announcementsList.innerHTML = '<p class="text-gray-400 text-sm">No announcements yet.</p>';
       }
+    }
+    
+    // Simple escape to prevent XSS (optional but good practice)
+    function escapeHtml(str) {
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
     }
     
     // Mining
@@ -331,7 +353,6 @@
         mineStatus.innerText = result.message;
         // If cooldown, still show timer
         if (result.message.includes('Cooldown')) {
-          // Re-fetch user data to get accurate lastMineTime
           const fresh = await apiCall('getUser', { username: currentUser });
           if (fresh.success) startCooldownTimer(fresh.lastMineTime);
         }
@@ -372,7 +393,7 @@
     document.getElementById('copyLinkBtn').addEventListener('click', () => {
       const code = referralLinkSpan.innerText;
       navigator.clipboard.writeText(code);
-      alert('Referral code copied!');
+      alert('Referral link copied!');
     });
     
     // Logout
@@ -401,4 +422,4 @@
     })();
   </script>
 </body>
-  </html>
+</html>
