@@ -162,8 +162,8 @@
 
   <script>
     // ========== CONFIGURATION ==========
-    // Your Google Apps Script Web App URL
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxl5nH1Ns0VJ2gWXZoAtjaaXtWPTLU1C5_VPuggjJZT2emK2lCwuGpRz2Jy0SSyJHVTUQ/exec';
+    // Your Google Apps Script Web App URL (updated)
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxAf95YoEF04RREdARs0Gy5A3PagNn2VzvfbiXysXzG_P1yh9d-9zQ5rvZR_3LD2dChSg/exec';
     
     // Helper fetch with error handling
     async function apiCall(action, data = {}) {
@@ -305,7 +305,6 @@
       dashboardUsername.innerText = data.username;
       dashboardBalance.innerText = parseFloat(data.balance).toFixed(4);
       dashboardRefCount.innerText = data.refCount;
-      // Show the full referral link for easier copying
       referralLinkSpan.innerText = `${window.location.origin}?ref=${data.referralCode}`;
     }
     
@@ -324,8 +323,8 @@
       }
     }
     
-    // Simple escape to prevent XSS (optional but good practice)
     function escapeHtml(str) {
+      if (!str) return '';
       return str.replace(/[&<>]/g, function(m) {
         if (m === '&') return '&amp;';
         if (m === '<') return '&lt;';
