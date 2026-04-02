@@ -8,66 +8,78 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body{
-  background:#0b0f19;
-  color:white;
-  font-family:sans-serif;
-}
+body{background:#0b0f19;color:white;}
 .card{
   background:#121826;
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 0 15px rgba(0,0,0,0.5);
 }
-.btn{
-  padding:10px;
-  border-radius:10px;
-  cursor:pointer;
-}
-.btn-blue{background:#2563eb;}
-.btn-green{background:#16a34a;}
-.btn-red{background:#dc2626;}
-.hidden{display:none;}
 </style>
 </head>
 
 <body class="p-4">
 
-<!-- AUTH -->
+<!-- LOGIN -->
 <div id="auth" class="max-w-md mx-auto card">
-  <h2 class="text-2xl font-bold mb-4 text-center">Rida Network</h2>
+  <h2 class="text-xl mb-4 text-center">Rida Network</h2>
 
   <input id="email" placeholder="Email" class="w-full p-2 mb-2 text-black rounded">
-  <input id="password" placeholder="Password" type="password" class="w-full p-2 mb-2 text-black rounded">
+  <input id="password" type="password" placeholder="Password" class="w-full p-2 mb-2 text-black rounded">
 
   <div class="flex gap-2">
-    <button onclick="register()" class="btn btn-green w-1/2">Register</button>
-    <button onclick="login()" class="btn btn-blue w-1/2">Login</button>
+    <button onclick="register()" class="bg-green-500 w-1/2 p-2 rounded">Register</button>
+    <button onclick="login()" class="bg-blue-500 w-1/2 p-2 rounded">Login</button>
   </div>
 
   <p id="msg" class="text-sm mt-2"></p>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" class="hidden max-w-md mx-auto space-y-4">
+<div id="app" class="hidden">
 
-  <div class="card text-center">
-    <h2 class="text-xl font-bold">Balance</h2>
-    <p id="balance" class="text-3xl">0</p>
+  <!-- HEADER -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-lg font-bold">Rida Network</h2>
+    <button onclick="logout()" class="text-red-400">Logout</button>
   </div>
 
-  <div class="card text-center">
-    <button onclick="mine()" class="btn btn-blue w-full">Start Mining</button>
+  <!-- STATS -->
+  <div class="grid grid-cols-2 gap-3 mb-4">
+    <div class="card text-center">
+      <p>Balance</p>
+      <h2 id="balance" class="text-xl">0</h2>
+    </div>
+
+    <div class="card text-center">
+      <p>Mining Rate</p>
+      <h2>0.1 / day</h2>
+    </div>
+
+    <div class="card text-center">
+      <p>Status</p>
+      <h2 id="status">Inactive</h2>
+    </div>
+
+    <div class="card text-center">
+      <p>UID</p>
+      <h2 id="uid">---</h2>
+    </div>
+  </div>
+
+  <!-- MINING -->
+  <div class="card text-center mb-4">
+    <button onclick="mine()" class="bg-blue-600 w-full p-3 rounded">
+      ⛏️ Start Mining
+    </button>
     <p id="mineMsg" class="text-sm mt-2"></p>
   </div>
 
-  <div class="card">
-    <h3 class="font-bold mb-2">Broadcast</h3>
-    <textarea id="broadcastText" class="w-full text-black p-2 rounded"></textarea>
-    <button onclick="broadcast()" class="btn btn-green w-full mt-2">Send</button>
+  <!-- BROADCAST -->
+  <div class="card mb-4">
+    <textarea id="broadcastText" class="w-full p-2 text-black rounded" placeholder="Admin message"></textarea>
+    <button onclick="broadcast()" class="bg-green-600 w-full p-2 mt-2 rounded">Send</button>
   </div>
-
-  <button onclick="logout()" class="btn btn-red w-full">Logout</button>
 
 </div>
 
@@ -76,77 +88,81 @@ const API = "https://script.google.com/macros/s/AKfycbzBd1aQMLrn7hjdLgdBkg3lioya
 
 let user = null;
 
-// ---------- AUTH ----------
-function register(){
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+// ---------- API HELPER ----------
+async function api(params){
+  const res = await fetch(API + "?" + new URLSearchParams(params));
+  const text = await res.text();
+  console.log("API:", text);
 
-  fetch(`${API}?action=register&email=${email}&password=${password}`)
-  .then(res=>res.json())
-  .then(data=>{
-    showMsg(data.msg);
-  });
+  try { return JSON.parse(text); }
+  catch { return {success:false,msg:"Invalid server"}; }
 }
 
-function login(){
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-
-  fetch(`${API}?action=login&email=${email}&password=${password}`)
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.success){
-      user = data.data;
-      localStorage.setItem("user", JSON.stringify(user));
-      loadDashboard();
-    } else {
-      showMsg(data.msg);
-    }
+// ---------- AUTH ----------
+async function register(){
+  const res = await api({
+    action:"register",
+    email:email.value,
+    password:password.value
   });
+  msg.innerText = res.msg;
+}
+
+async function login(){
+  const res = await api({
+    action:"login",
+    email:email.value,
+    password:password.value
+  });
+
+  if(res.success){
+    user = res.data || res;
+    localStorage.setItem("user", JSON.stringify(user));
+    loadApp();
+  }else{
+    msg.innerText = res.msg;
+  }
 }
 
 function logout(){
-  localStorage.removeItem("user");
+  localStorage.clear();
   location.reload();
 }
 
-// ---------- DASHBOARD ----------
-function loadDashboard(){
-  document.getElementById('auth').classList.add('hidden');
-  document.getElementById('dashboard').classList.remove('hidden');
+// ---------- APP ----------
+function loadApp(){
+  auth.classList.add("hidden");
+  app.classList.remove("hidden");
 
-  document.getElementById('balance').innerText = user.balance;
+  balance.innerText = user.balance || 0;
+  uid.innerText = user.uid || "N/A";
+  status.innerText = "Ready";
 }
 
 // ---------- MINING ----------
-function mine(){
-  fetch(`${API}?action=start_mining&uid=${user.uid}`)
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.success){
-      user.balance = data.data.balance;
-      document.getElementById('balance').innerText = user.balance;
-      document.getElementById('mineMsg').innerText = "Mining success!";
-    } else {
-      document.getElementById('mineMsg').innerText = data.msg;
-    }
+async function mine(){
+  const res = await api({
+    action:"start_mining",
+    uid:user.uid
   });
+
+  if(res.success){
+    user.balance = res.data.balance;
+    balance.innerText = user.balance;
+    mineMsg.innerText = "Mining success!";
+  }else{
+    mineMsg.innerText = res.msg;
+  }
 }
 
 // ---------- BROADCAST ----------
-function broadcast(){
-  const text = document.getElementById('broadcastText').value;
-
-  fetch(`${API}?action=broadcast&message=${encodeURIComponent(text)}`)
-  .then(res=>res.json())
-  .then(data=>{
-    alert(data.msg);
+async function broadcast(){
+  const res = await api({
+    action:"broadcast",
+    message:broadcastText.value
   });
-}
 
-// ---------- HELPERS ----------
-function showMsg(msg){
-  document.getElementById('msg').innerText = msg;
+  alert(res.msg);
 }
 
 // ---------- INIT ----------
@@ -154,7 +170,7 @@ window.onload = ()=>{
   const saved = localStorage.getItem("user");
   if(saved){
     user = JSON.parse(saved);
-    loadDashboard();
+    loadApp();
   }
 };
 </script>
