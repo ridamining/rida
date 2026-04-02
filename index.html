@@ -8,21 +8,28 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body{background:#0b0f19;color:white;}
+body{background:#0b0f19;color:white;font-family:sans-serif;}
 .card{
   background:#121826;
   border-radius:16px;
   padding:16px;
-  box-shadow:0 0 15px rgba(0,0,0,0.5);
+  box-shadow:0 0 20px rgba(0,0,0,0.6);
+}
+.glow{
+  animation: glow 2s infinite alternate;
+}
+@keyframes glow{
+  from{box-shadow:0 0 5px #3b82f6;}
+  to{box-shadow:0 0 20px #3b82f6;}
 }
 </style>
 </head>
 
-<body class="p-4">
+<body class="p-3">
 
 <!-- LOGIN -->
 <div id="auth" class="max-w-md mx-auto card">
-  <h2 class="text-xl mb-4 text-center">Rida Network</h2>
+  <h2 class="text-xl text-center mb-4">🚀 Rida Network</h2>
 
   <input id="email" placeholder="Email" class="w-full p-2 mb-2 text-black rounded">
   <input id="password" type="password" placeholder="Password" class="w-full p-2 mb-2 text-black rounded">
@@ -35,12 +42,12 @@ body{background:#0b0f19;color:white;}
   <p id="msg" class="text-sm mt-2"></p>
 </div>
 
-<!-- DASHBOARD -->
+<!-- APP -->
 <div id="app" class="hidden">
 
   <!-- HEADER -->
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-lg font-bold">Rida Network</h2>
+    <h2 class="text-lg font-bold">Rida Dashboard</h2>
     <button onclick="logout()" class="text-red-400">Logout</button>
   </div>
 
@@ -52,8 +59,8 @@ body{background:#0b0f19;color:white;}
     </div>
 
     <div class="card text-center">
-      <p>Mining Rate</p>
-      <h2>0.1 / day</h2>
+      <p>Mining Speed</p>
+      <h2 id="speed">0.000001/sec</h2>
     </div>
 
     <div class="card text-center">
@@ -69,15 +76,21 @@ body{background:#0b0f19;color:white;}
 
   <!-- MINING -->
   <div class="card text-center mb-4">
-    <button onclick="mine()" class="bg-blue-600 w-full p-3 rounded">
+    <button id="mineBtn" onclick="startMining()" class="bg-blue-600 w-full p-3 rounded glow">
       ⛏️ Start Mining
     </button>
     <p id="mineMsg" class="text-sm mt-2"></p>
   </div>
 
-  <!-- BROADCAST -->
+  <!-- REFERRAL -->
   <div class="card mb-4">
-    <textarea id="broadcastText" class="w-full p-2 text-black rounded" placeholder="Admin message"></textarea>
+    <p>Your Referral Link:</p>
+    <input id="refLink" class="w-full text-black p-2 rounded mt-2">
+  </div>
+
+  <!-- BROADCAST -->
+  <div class="card">
+    <textarea id="broadcastText" class="w-full text-black p-2 rounded"></textarea>
     <button onclick="broadcast()" class="bg-green-600 w-full p-2 mt-2 rounded">Send</button>
   </div>
 
@@ -86,92 +99,75 @@ body{background:#0b0f19;color:white;}
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzBd1aQMLrn7hjdLgdBkg3lioyawl_GaG3BX-kLUyUZ0KA16DRa7SdsQuvccNnweBXC/exec";
 
-let user = null;
+let user=null;
+let mining=false;
+let interval=null;
 
-// ---------- API HELPER ----------
-async function api(params){
-  const res = await fetch(API + "?" + new URLSearchParams(params));
-  const text = await res.text();
-  console.log("API:", text);
-
-  try { return JSON.parse(text); }
-  catch { return {success:false,msg:"Invalid server"}; }
+// API
+async function api(p){
+  const res=await fetch(API+"?"+new URLSearchParams(p));
+  const t=await res.text();
+  try{return JSON.parse(t);}catch{return {success:false,msg:"Server error"};}
 }
 
-// ---------- AUTH ----------
+// AUTH
 async function register(){
-  const res = await api({
-    action:"register",
-    email:email.value,
-    password:password.value
-  });
-  msg.innerText = res.msg;
+  let r=await api({action:"register",email:email.value,password:password.value});
+  msg.innerText=r.msg;
 }
 
 async function login(){
-  const res = await api({
-    action:"login",
-    email:email.value,
-    password:password.value
-  });
-
-  if(res.success){
-    user = res.data || res;
-    localStorage.setItem("user", JSON.stringify(user));
+  let r=await api({action:"login",email:email.value,password:password.value});
+  if(r.success){
+    user=r.data||r;
+    localStorage.setItem("user",JSON.stringify(user));
     loadApp();
-  }else{
-    msg.innerText = res.msg;
-  }
+  }else msg.innerText=r.msg;
 }
 
 function logout(){
-  localStorage.clear();
-  location.reload();
+  localStorage.clear();location.reload();
 }
 
-// ---------- APP ----------
+// LOAD
 function loadApp(){
   auth.classList.add("hidden");
   app.classList.remove("hidden");
 
-  balance.innerText = user.balance || 0;
-  uid.innerText = user.uid || "N/A";
-  status.innerText = "Ready";
+  balance.innerText=user.balance||0;
+  uid.innerText=user.uid||"N/A";
+  refLink.value=location.href+"?ref="+user.uid;
 }
 
-// ---------- MINING ----------
-async function mine(){
-  const res = await api({
-    action:"start_mining",
-    uid:user.uid
-  });
+// MINING SYSTEM
+function startMining(){
+  if(mining) return;
 
-  if(res.success){
-    user.balance = res.data.balance;
-    balance.innerText = user.balance;
-    mineMsg.innerText = "Mining success!";
-  }else{
-    mineMsg.innerText = res.msg;
-  }
+  mining=true;
+  status.innerText="Mining...";
+  mineBtn.innerText="Mining Active";
+
+  let rate=0.1/86400; // per second
+
+  interval=setInterval(()=>{
+    user.balance=parseFloat(user.balance)+rate;
+    balance.innerText=user.balance.toFixed(6);
+  },1000);
+
+  // save once per day
+  api({action:"start_mining",uid:user.uid});
 }
 
-// ---------- BROADCAST ----------
+// BROADCAST
 async function broadcast(){
-  const res = await api({
-    action:"broadcast",
-    message:broadcastText.value
-  });
-
-  alert(res.msg);
+  let r=await api({action:"broadcast",message:broadcastText.value});
+  alert(r.msg);
 }
 
-// ---------- INIT ----------
-window.onload = ()=>{
-  const saved = localStorage.getItem("user");
-  if(saved){
-    user = JSON.parse(saved);
-    loadApp();
-  }
+// INIT
+window.onload=()=>{
+  let s=localStorage.getItem("user");
+  if(s){user=JSON.parse(s);loadApp();}
 };
 </script>
 
