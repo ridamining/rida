@@ -2,207 +2,219 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>NexusMine Pro | Advanced Crypto Mining Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>NexusMine Pro | Crypto Mining Platform</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    :root {
-      --bg-primary: #0a0f1e;
-      --bg-secondary: #0d1425;
-      --bg-card: rgba(15, 25, 45, 0.95);
-      --border-color: rgba(0, 255, 255, 0.2);
-      --cyan: #00ffcc;
-      --cyan-glow: rgba(0, 255, 204, 0.3);
-      --purple: #b76eff;
-      --orange: #ff9f4a;
-      --red: #ff5e7e;
-      --green: #4effb5;
-      --text-primary: #eef5ff;
-      --text-secondary: #8aa9d1;
+      font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
-      background: radial-gradient(circle at 10% 20%, var(--bg-primary), #03050b);
+      background: linear-gradient(135deg, #0a0f1e 0%, #03050b 100%);
       min-height: 100vh;
-      padding: 16px;
+      padding: 20px;
     }
 
-    .app-container {
-      max-width: 1400px;
+    .container {
+      max-width: 1200px;
       margin: 0 auto;
     }
 
     /* Header */
     .header {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      padding: 16px 24px;
-      margin-bottom: 24px;
-      border: 1px solid var(--border-color);
+      background: rgba(15, 25, 45, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px 30px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(0, 255, 255, 0.3);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 15px;
     }
 
     .logo h1 {
-      font-size: 1.8rem;
-      background: linear-gradient(135deg, var(--cyan), #2ad4ff);
+      font-size: 28px;
+      background: linear-gradient(135deg, #00ffcc, #0099ff);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
     .logo p {
-      font-size: 0.7rem;
-      color: var(--text-secondary);
+      font-size: 12px;
+      color: #8aa9d1;
     }
 
-    .user-info {
+    .user-card {
       display: flex;
       align-items: center;
       gap: 20px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 8px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
       border-radius: 50px;
     }
 
-    .balance-display {
-      font-size: 1.3rem;
+    .balance {
+      font-size: 20px;
       font-weight: bold;
-      color: var(--cyan);
+      color: #00ffcc;
     }
 
     .role-badge {
-      padding: 4px 12px;
+      padding: 5px 15px;
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 12px;
       font-weight: bold;
     }
 
     .role-admin {
       background: rgba(183, 110, 255, 0.2);
-      color: var(--purple);
-      border: 1px solid var(--purple);
+      color: #b76eff;
+      border: 1px solid #b76eff;
     }
 
     .role-user {
       background: rgba(0, 255, 204, 0.15);
-      color: var(--cyan);
-      border: 1px solid var(--cyan);
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
     }
 
-    /* Dashboard Layout */
-    .dashboard-layout {
+    button {
+      background: linear-gradient(95deg, #0e2a3b, #0a1a2f);
+      border: 1px solid #00ffcc;
+      padding: 10px 20px;
+      border-radius: 30px;
+      color: #00ffcc;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+    }
+
+    /* Main Layout */
+    .dashboard {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
     }
 
     @media (max-width: 768px) {
-      .dashboard-layout {
+      .dashboard {
         grid-template-columns: 1fr;
       }
     }
 
     /* Sidebar */
     .sidebar {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      border: 1px solid var(--border-color);
+      background: rgba(15, 25, 45, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
       padding: 20px;
+      border: 1px solid rgba(0, 255, 255, 0.3);
       height: fit-content;
     }
 
     .nav-item {
       padding: 12px 16px;
       margin: 8px 0;
-      border-radius: 16px;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--text-secondary);
+      color: #8aa9d1;
     }
 
     .nav-item:hover {
       background: rgba(0, 255, 204, 0.1);
-      color: var(--cyan);
+      color: #00ffcc;
     }
 
     .nav-item.active {
       background: rgba(0, 255, 204, 0.15);
-      color: var(--cyan);
-      border-left: 3px solid var(--cyan);
+      color: #00ffcc;
+      border-left: 3px solid #00ffcc;
     }
 
-    /* Main Content */
-    .main-content {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      border: 1px solid var(--border-color);
-      padding: 24px;
+    /* Content */
+    .content {
+      background: rgba(15, 25, 45, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px;
+      border: 1px solid rgba(0, 255, 255, 0.3);
       min-height: 500px;
     }
 
-    /* Cards */
     .card {
       background: rgba(0, 0, 0, 0.3);
-      border-radius: 20px;
+      border-radius: 16px;
       padding: 20px;
       margin-bottom: 20px;
-      border: 1px solid var(--border-color);
     }
 
     .card-title {
-      font-size: 1.2rem;
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 16px;
-      color: var(--cyan);
+      margin-bottom: 15px;
+      color: #00ffcc;
     }
 
-    /* Mining Area */
+    /* Forms */
+    input, textarea, select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #2a3a5a;
+      padding: 12px;
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #00ffcc;
+    }
+
+    /* Mining */
     .mining-area {
       text-align: center;
       padding: 30px;
     }
 
     .mining-animation {
-      font-size: 4rem;
+      font-size: 60px;
       margin: 20px 0;
     }
 
-    .mine-button {
+    .mine-btn {
       background: radial-gradient(circle at 30% 10%, #ffb347, #ff7e05);
       border: none;
-      padding: 18px 40px;
-      font-size: 1.3rem;
+      padding: 15px 40px;
+      font-size: 18px;
       font-weight: bold;
-      border-radius: 60px;
+      border-radius: 50px;
+      color: white;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 0 20px rgba(255, 125, 5, 0.5);
+      margin-top: 20px;
     }
 
-    .mine-button:disabled {
+    .mine-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
     /* Tables */
-    .user-table {
-      width: 100%;
+    .table-container {
       overflow-x: auto;
     }
 
@@ -214,176 +226,114 @@
     th, td {
       padding: 12px;
       text-align: left;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid #2a3a5a;
     }
 
     th {
-      color: var(--cyan);
-      font-weight: 600;
+      color: #00ffcc;
     }
 
     /* Chat */
     .chat-container {
       display: flex;
       flex-direction: column;
-      height: 500px;
+      height: 450px;
     }
 
     .chat-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 16px;
-      margin-bottom: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
     }
 
-    .message-bubble {
-      margin-bottom: 12px;
-      padding: 10px 14px;
-      border-radius: 18px;
+    .message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 12px;
       max-width: 70%;
     }
 
     .message-out {
-      background: rgba(0, 255, 204, 0.15);
+      background: rgba(0, 255, 204, 0.2);
       margin-left: auto;
-      color: var(--cyan);
+      color: #00ffcc;
     }
 
     .message-in {
       background: rgba(255, 255, 255, 0.1);
-      color: var(--text-primary);
+      color: white;
     }
 
-    .chat-input-area {
+    .chat-input {
       display: flex;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .chat-input-area input {
+    .chat-input input {
       flex: 1;
-      padding: 12px;
-      border-radius: 30px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--border-color);
-      color: white;
+      margin-bottom: 0;
     }
 
-    /* Buttons */
-    .btn-primary {
-      background: linear-gradient(95deg, #0e2a3b, #0a1a2f);
-      border: 1px solid var(--cyan);
-      padding: 10px 20px;
-      border-radius: 30px;
-      color: var(--cyan);
-      cursor: pointer;
-    }
-
-    .btn-success {
-      background: rgba(78, 255, 181, 0.2);
-      border: 1px solid var(--green);
-      color: var(--green);
-    }
-
-    .btn-danger {
-      background: rgba(255, 94, 126, 0.2);
-      border: 1px solid var(--red);
-      color: var(--red);
-    }
-
-    /* Forms */
-    input, select, textarea {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--border-color);
-      padding: 10px 14px;
-      border-radius: 12px;
-      color: white;
-      width: 100%;
-    }
-
-    /* Status Badges */
-    .status-badge {
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 0.7rem;
-    }
-
+    /* Status badges */
     .status-verified {
       background: rgba(78, 255, 181, 0.2);
-      color: var(--green);
+      color: #4effb5;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
     }
 
     .status-unverified {
       background: rgba(255, 94, 126, 0.2);
-      color: var(--red);
+      color: #ff5e7e;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
     }
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
+    .btn-small {
+      padding: 5px 12px;
+      font-size: 12px;
+      margin: 2px;
     }
 
-    .modal.active {
-      display: flex;
+    .btn-success {
+      border-color: #4effb5;
+      color: #4effb5;
     }
 
-    .modal-content {
-      background: var(--bg-card);
-      border-radius: 24px;
-      padding: 24px;
-      max-width: 500px;
-      width: 90%;
-      border: 1px solid var(--cyan);
+    .btn-danger {
+      border-color: #ff5e7e;
+      color: #ff5e7e;
     }
 
-    /* Loading */
+    .message-text {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .error {
+      color: #ff5e7e;
+    }
+
+    .success {
+      color: #4effb5;
+    }
+
     .loading {
       text-align: center;
       padding: 40px;
-      color: var(--text-secondary);
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.9);
-      padding: 12px 24px;
-      border-radius: 50px;
-      border-left: 4px solid var(--cyan);
-      z-index: 1100;
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+      color: #8aa9d1;
     }
   </style>
 </head>
 <body>
-<div class="app-container" id="app">
-  <!-- Header will be injected -->
-  <div id="header"></div>
-  <div id="dashboard"></div>
-</div>
+<div class="container" id="app"></div>
 
 <script>
 // ============================================
@@ -392,13 +342,12 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbzaJ3N8ZQ8f9zwLXlbBL0P-ZurhvLr5za8kIIRRwBR3R8_WKR_3EU1I4Hv16IXpEmOz/exec';
 
 // ============================================
-// GLOBAL STATE
+// STATE
 // ============================================
 let currentUser = null;
 let currentPage = 'mining';
 let selectedChatUser = null;
 let allUsers = [];
-let announcements = [];
 let messageInterval = null;
 
 // ============================================
@@ -410,7 +359,8 @@ async function api(action, data = {}) {
   
   try {
     const response = await fetch(url);
-    return await response.json();
+    const result = await response.json();
+    return result;
   } catch (error) {
     console.error('API Error:', error);
     return { success: false, msg: error.message };
@@ -430,14 +380,14 @@ function hashPassword(pwd) {
 }
 
 // ============================================
-// USER MANAGEMENT
+// USER FUNCTIONS
 // ============================================
 async function register(email, password) {
   email = email.trim().toLowerCase();
   password = password.trim();
   
   if (!email || !password) return { success: false, msg: 'All fields required' };
-  if (password.length < 4) return { success: false, msg: 'Password too short' };
+  if (password.length < 4) return { success: false, msg: 'Password too short (min 4 characters)' };
   
   const existing = await api('GET_USER', { email });
   if (existing.success) return { success: false, msg: 'Email already exists' };
@@ -455,8 +405,7 @@ async function register(email, password) {
   });
   
   if (result.success) {
-    showToast('Registration successful! Please login.', 'success');
-    return { success: true };
+    return { success: true, msg: 'Registration successful! Please login.' };
   }
   return { success: false, msg: 'Registration failed' };
 }
@@ -479,7 +428,7 @@ async function login(email, password) {
 }
 
 // ============================================
-// MINING LOGIC
+// MINING
 // ============================================
 async function performMining() {
   const now = Date.now();
@@ -501,12 +450,6 @@ async function performMining() {
   });
   
   if (result.success) {
-    await api('ADD_MINING_LOG', {
-      uid: currentUser.uid,
-      amount: reward,
-      status: 'success'
-    });
-    
     await api('SAVE_USER', {
       userData: JSON.stringify({
         email: currentUser.email,
@@ -554,8 +497,7 @@ async function createAnnouncement(title, content) {
 async function getAnnouncements() {
   const result = await api('GET_ANNOUNCEMENTS');
   if (result.success) {
-    announcements = result.announcements;
-    return announcements;
+    return result.announcements;
   }
   return [];
 }
@@ -582,34 +524,40 @@ async function getMessages(withUID) {
 // ============================================
 // UI RENDERING
 // ============================================
-function showToast(msg, type = 'info') {
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerHTML = msg;
-  toast.style.borderLeftColor = type === 'success' ? '#4effb5' : type === 'error' ? '#ff5e7e' : '#00ffcc';
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+function showMessage(elementId, msg, isError = true) {
+  const el = document.getElementById(elementId);
+  if (el) {
+    el.innerHTML = `<div class="message-text ${isError ? 'error' : 'success'}">${msg}</div>`;
+    setTimeout(() => {
+      if (document.getElementById(elementId)) {
+        document.getElementById(elementId).innerHTML = '';
+      }
+    }, 3000);
+  }
 }
 
+// Render Login/Register Screen
 function renderAuth() {
-  const container = document.getElementById('dashboard');
-  container.innerHTML = `
-    <div style="max-width: 450px; margin: 50px auto;">
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div style="max-width: 450px; margin: 80px auto;">
       <div class="card">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <h2 style="color: var(--cyan);">⚡ Welcome to NexusMine</h2>
-          <p style="color: var(--text-secondary);">Advanced Crypto Mining Platform</p>
+        <div style="text-align: center; margin-bottom: 25px;">
+          <h1 style="font-size: 36px; background: linear-gradient(135deg, #00ffcc, #0099ff); -webkit-background-clip: text; background-clip: text; color: transparent;">⚡ NexusMine</h1>
+          <p style="color: #8aa9d1;">Advanced Crypto Mining Platform</p>
         </div>
-        <div class="toggle-group" style="display: flex; gap: 12px; margin-bottom: 24px;">
-          <button class="btn-primary" id="loginTab" style="flex:1;">Login</button>
-          <button class="btn-primary" id="registerTab" style="flex:1;">Register</button>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <button id="loginTab" style="flex:1;" class="active-tab">Login</button>
+          <button id="registerTab" style="flex:1;">Register</button>
         </div>
+        
         <div id="authForm">
-          <input type="email" id="email" placeholder="Email" style="margin-bottom: 12px;">
-          <input type="password" id="password" placeholder="Password" style="margin-bottom: 12px;">
-          <button class="btn-primary" id="submitBtn" style="width:100%;">Login</button>
+          <input type="email" id="email" placeholder="Email address">
+          <input type="password" id="password" placeholder="Password">
+          <button id="submitBtn" style="width:100%; margin-top: 10px;">Login</button>
         </div>
-        <div id="authMsg" class="message" style="margin-top: 16px; text-align: center;"></div>
+        <div id="authMsg"></div>
       </div>
     </div>
   `;
@@ -618,96 +566,79 @@ function renderAuth() {
   
   document.getElementById('loginTab').onclick = () => {
     mode = 'login';
-    document.getElementById('submitBtn').textContent = 'Login';
+    document.getElementById('submitBtn').innerText = 'Login';
     document.getElementById('authMsg').innerHTML = '';
   };
   
   document.getElementById('registerTab').onclick = () => {
     mode = 'register';
-    document.getElementById('submitBtn').textContent = 'Register';
+    document.getElementById('submitBtn').innerText = 'Register';
     document.getElementById('authMsg').innerHTML = '';
   };
   
   document.getElementById('submitBtn').onclick = async () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const msgDiv = document.getElementById('authMsg');
     
     if (mode === 'login') {
       const result = await login(email, password);
       if (result.success) {
         currentUser = result.user;
-        await initApp();
+        renderDashboard();
       } else {
-        msgDiv.innerHTML = `<span style="color: var(--red);">❌ ${result.msg}</span>`;
+        showMessage('authMsg', result.msg, true);
       }
     } else {
       const result = await register(email, password);
       if (result.success) {
-        msgDiv.innerHTML = `<span style="color: var(--green);">✅ ${result.msg}</span>`;
+        showMessage('authMsg', result.msg, false);
         document.getElementById('email').value = '';
         document.getElementById('password').value = '';
       } else {
-        msgDiv.innerHTML = `<span style="color: var(--red);">❌ ${result.msg}</span>`;
+        showMessage('authMsg', result.msg, true);
       }
     }
   };
 }
 
-function renderHeader() {
-  const header = document.getElementById('header');
-  if (!currentUser) return;
+// Render Main Dashboard
+function renderDashboard() {
+  const app = document.getElementById('app');
+  const isAdmin = currentUser.role === 'admin';
   
-  header.innerHTML = `
+  app.innerHTML = `
     <div class="header">
       <div class="logo">
         <h1>⚡ NexusMine Pro</h1>
-        <p>Advanced Mining Platform v2.0</p>
+        <p>Advanced Mining Platform</p>
       </div>
-      <div class="user-info">
+      <div class="user-card">
         <span>${currentUser.email}</span>
-        <span class="balance-display" id="headerBalance">${currentUser.balance.toFixed(4)} NXM</span>
-        <span class="role-badge ${currentUser.role === 'admin' ? 'role-admin' : 'role-user'}">${currentUser.role === 'admin' ? '👑 ADMIN' : '⛏️ MINER'}</span>
-        <button class="btn-primary" id="logoutBtn" style="margin:0; padding:6px 16px;">Logout</button>
+        <span class="balance" id="headerBalance">${currentUser.balance.toFixed(4)} NXM</span>
+        <span class="role-badge ${isAdmin ? 'role-admin' : 'role-user'}">${isAdmin ? 'ADMIN' : 'MINER'}</span>
+        <button id="logoutBtn">Logout</button>
       </div>
+    </div>
+    
+    <div class="dashboard">
+      <div class="sidebar">
+        <div class="nav-item ${currentPage === 'mining' ? 'active' : ''}" data-page="mining">⛏️ Mining Dashboard</div>
+        <div class="nav-item ${currentPage === 'stats' ? 'active' : ''}" data-page="stats">📊 My Statistics</div>
+        ${isAdmin ? `
+          <div class="nav-item ${currentPage === 'users' ? 'active' : ''}" data-page="users">👥 User Management</div>
+          <div class="nav-item ${currentPage === 'announcements' ? 'active' : ''}" data-page="announcements">📢 Announcements</div>
+        ` : ''}
+        <div class="nav-item ${currentPage === 'chat' ? 'active' : ''}" data-page="chat">💬 Support Chat</div>
+      </div>
+      <div class="content" id="pageContent"></div>
     </div>
   `;
   
   document.getElementById('logoutBtn').onclick = () => {
     currentUser = null;
     if (messageInterval) clearInterval(messageInterval);
-    initApp();
+    renderAuth();
   };
-}
-
-function renderDashboard() {
-  const container = document.getElementById('dashboard');
-  const isAdmin = currentUser.role === 'admin';
-  
-  container.innerHTML = `
-    <div class="dashboard-layout">
-      <div class="sidebar">
-        <div class="nav-item ${currentPage === 'mining' ? 'active' : ''}" data-page="mining">
-          ⛏️ Mining Dashboard
-        </div>
-        <div class="nav-item ${currentPage === 'stats' ? 'active' : ''}" data-page="stats">
-          📊 Mining Stats
-        </div>
-        ${isAdmin ? `
-          <div class="nav-item ${currentPage === 'users' ? 'active' : ''}" data-page="users">
-            👥 User Management
-          </div>
-          <div class="nav-item ${currentPage === 'announcements' ? 'active' : ''}" data-page="announcements">
-            📢 Announcements
-          </div>
-        ` : ''}
-        <div class="nav-item ${currentPage === 'chat' ? 'active' : ''}" data-page="chat">
-          💬 Support Chat
-        </div>
-      </div>
-      <div class="main-content" id="pageContent"></div>
-    </div>
-  `;
   
   document.querySelectorAll('.nav-item').forEach(item => {
     item.onclick = () => {
@@ -719,6 +650,7 @@ function renderDashboard() {
   renderPageContent();
 }
 
+// Render Current Page Content
 async function renderPageContent() {
   const content = document.getElementById('pageContent');
   
@@ -750,8 +682,8 @@ async function renderMining(container) {
     <div class="mining-area">
       <div class="mining-animation" id="miningAnim">⛏️ 💎 ⛏️</div>
       <h2>Mining Reward: 0.5 NXM per session</h2>
-      <p style="color: var(--text-secondary); margin: 10px 0;">Cooldown: 24 hours</p>
-      <button class="mine-button" id="mineBtn" ${!canMine ? 'disabled' : ''}>
+      <p style="color: #8aa9d1; margin: 10px 0;">⏰ Cooldown: 24 hours</p>
+      <button class="mine-btn" id="mineBtn" ${!canMine ? 'disabled' : ''}>
         ${canMine ? '⚡ START MINING' : `⏰ COOLDOWN (${hoursLeft}h)`}
       </button>
       <div id="mineMsg" style="margin-top: 20px;"></div>
@@ -759,4 +691,58 @@ async function renderMining(container) {
   `;
   
   document.getElementById('mineBtn')?.addEventListener('click', async () => {
-    const anim = document.getElementById('miningAn
+    const anim = document.getElementById('miningAnim');
+    const btn = document.getElementById('mineBtn');
+    const msgDiv = document.getElementById('mineMsg');
+    
+    anim.innerHTML = '🌀 MINING IN PROGRESS 🌀';
+    btn.disabled = true;
+    
+    const result = await performMining();
+    
+    if (result.success) {
+      anim.innerHTML = '✅ +0.5 NXM MINED! ✅';
+      msgDiv.innerHTML = `<div class="success">${result.msg || 'Mining successful!'}</div>`;
+      document.getElementById('headerBalance').innerHTML = result.newBalance.toFixed(4) + ' NXM';
+      setTimeout(() => renderMining(container), 2000);
+    } else {
+      anim.innerHTML = '⛏️ 💎 ⛏️';
+      msgDiv.innerHTML = `<div class="error">❌ ${result.msg}</div>`;
+      btn.disabled = false;
+      if (result.msg.includes('Cooldown')) setTimeout(() => renderMining(container), 2000);
+    }
+  });
+}
+
+async function renderStats(container) {
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-title">📊 Your Mining Statistics</div>
+      <div style="padding: 15px 0; border-bottom: 1px solid #2a3a5a;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+          <span>💰 Current Balance</span>
+          <span style="color: #00ffcc; font-size: 24px;">${currentUser.balance.toFixed(4)} NXM</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+          <span>⏰ Last Mining Session</span>
+          <span>${currentUser.lastMine ? new Date(currentUser.lastMine).toLocaleString() : 'Never'}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>✅ Account Status</span>
+          <span class="${currentUser.status === 'verified' ? 'status-verified' : 'status-unverified'}">${currentUser.status || 'unverified'}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function renderUserManagement(container) {
+  const users = await getAllUsers();
+  
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-title">👥 User Management</div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Email</th><th>Balance</th><th>Role</th><th>Status</th><th>Actions</th><
