@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rida Network Dashboard</title>
 <style>
-  body {margin:0; font-family: 'Arial', sans-serif; background:#121212; color:#fff;}
+  body {margin:0; font-family:'Arial',sans-serif; background:#121212; color:#fff;}
   .container {max-width:450px; margin:50px auto; padding:25px; background:#1e1e1e; border-radius:12px;}
   input, button, textarea {width:100%; padding:12px; margin:8px 0; border-radius:6px; border:none; box-sizing:border-box;}
   button {background:#ff4c4c; color:#fff; font-weight:bold; cursor:pointer;}
@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<!-- LOGIN / REGISTER -->
+<!-- AUTH BOX -->
 <div class="container" id="authBox">
   <div class="header"><h1>Rida Network</h1></div>
   <div id="msg" class="msg"></div>
@@ -30,7 +30,7 @@
   <button id="registerBtn">Register</button>
 </div>
 
-<!-- DASHBOARD -->
+<!-- DASHBOARD BOX -->
 <div class="container hide" id="dashboardBox">
   <div class="header"><h1>Dashboard</h1></div>
   <p id="welcomeText"></p>
@@ -45,36 +45,40 @@
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwfjeDF7ZZDvb3BRKSYuTYj5KZgwTW0f0gRETlE1ST6ej3E5uOinhf93Cn1g6u9DXjk/exec"; // your backend URL
+const API_URL = "https://script.google.com/macros/s/AKfycbwfjeDF7ZZDvb3BRKSYuTYj5KZgwTW0f0gRETlE1ST6ej3E5uOinhf93Cn1g6u9DXjk/exec"; // your backend
 let currentUser = null;
 
 function showMsg(msg,id="msg"){document.getElementById(id).innerText=msg;}
 
 // ---------- AUTH ----------
-document.getElementById("loginBtn").onclick = () => {
+async function sendRequest(params){
+  try{
+    const url = API_URL + "?" + new URLSearchParams(params).toString();
+    const resp = await fetch(url, {method:"GET"});
+    const data = await resp.json();
+    return data;
+  }catch(e){
+    return {success:false,msg:"Cannot connect to server"};
+  }
+}
+
+document.getElementById("loginBtn").onclick = async () => {
   const email=document.getElementById("email").value.trim();
   const password=document.getElementById("password").value.trim();
   if(!email||!password) return showMsg("Email & Password required");
 
-  fetch(`${API_URL}?action=LOGIN&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
-    .then(r=>r.json())
-    .then(res=>{
-      if(res.success){currentUser=res; showDashboard();}
-      else showMsg(res.msg);
-    }).catch(e=>showMsg("Server error"));
+  const res = await sendRequest({action:"LOGIN", email, password});
+  if(res.success){currentUser=res; showDashboard();}
+  else showMsg(res.msg);
 };
 
-document.getElementById("registerBtn").onclick = () => {
+document.getElementById("registerBtn").onclick = async () => {
   const email=document.getElementById("email").value.trim();
   const password=document.getElementById("password").value.trim();
   if(!email||!password) return showMsg("Email & Password required");
 
-  fetch(`${API_URL}?action=REGISTER&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
-    .then(r=>r.json())
-    .then(res=>{
-      if(res.success) showMsg("Registered successfully, please login");
-      else showMsg(res.msg);
-    }).catch(e=>showMsg("Server error"));
+  const res = await sendRequest({action:"REGISTER", email, password});
+  showMsg(res.msg);
 };
 
 // ---------- DASHBOARD ----------
@@ -96,24 +100,19 @@ document.getElementById("logoutBtn").onclick = () => {
 };
 
 // ---------- MINING ----------
-document.getElementById("mineBtn").onclick = () => {
+document.getElementById("mineBtn").onclick = async () => {
   if(!currentUser) return;
-  fetch(`${API_URL}?action=MINE&uid=${currentUser.uid}`)
-    .then(r=>r.json())
-    .then(res=>{
-      document.getElementById("dashMsg").innerText=res.msg;
-      if(res.success){currentUser.balance=res.balance; document.getElementById("balance").innerText=res.balance;}
-    }).catch(e=>document.getElementById("dashMsg").innerText="Server error");
+  const res = await sendRequest({action:"MINE", uid:currentUser.uid});
+  document.getElementById("dashMsg").innerText=res.msg;
+  if(res.success){currentUser.balance=res.balance; document.getElementById("balance").innerText=res.balance;}
 };
 
 // ---------- ADMIN BROADCAST ----------
-document.getElementById("broadcastBtn").onclick = () => {
+document.getElementById("broadcastBtn").onclick = async () => {
   const msg=document.getElementById("broadcastMsg").value.trim();
   if(!msg) return;
-  fetch(`${API_URL}?action=BROADCAST&uid=${currentUser.uid}&message=${encodeURIComponent(msg)}`)
-    .then(r=>r.json())
-    .then(res=>{document.getElementById("dashMsg").innerText=res.msg;})
-    .catch(e=>document.getElementById("dashMsg").innerText="Server error");
+  const res = await sendRequest({action:"BROADCAST", uid:currentUser.uid, message:msg});
+  document.getElementById("dashMsg").innerText=res.msg;
 };
 </script>
 </body>
