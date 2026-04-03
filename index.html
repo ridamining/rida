@@ -3,27 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rida Network</title>
+<title>Rida Network Dashboard</title>
 <style>
-body {font-family: Arial, sans-serif; background:#121212; color:#fff; margin:0; padding:0;}
-.container {max-width:400px; margin:50px auto; padding:20px; background:#1e1e1e; border-radius:10px;}
-input, button {width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none;}
-button {background:#ff4c4c; color:#fff; font-weight:bold; cursor:pointer;}
-button:hover {background:#ff1a1a;}
-.hide {display:none;}
-.header {text-align:center; margin-bottom:20px;}
-.header h1 {margin:0; color:#ff4c4c;}
-.msg {color:#ff4c4c; margin:10px 0; text-align:center;}
-.dashboard {margin-top:20px;}
-.dashboard p {margin:5px 0; font-weight:bold;}
+  body {margin:0; font-family: 'Arial', sans-serif; background:#121212; color:#fff;}
+  .container {max-width:450px; margin:50px auto; padding:25px; background:#1e1e1e; border-radius:12px;}
+  input, button, textarea {width:100%; padding:12px; margin:8px 0; border-radius:6px; border:none; box-sizing:border-box;}
+  button {background:#ff4c4c; color:#fff; font-weight:bold; cursor:pointer;}
+  button:hover {background:#ff1a1a;}
+  .hide {display:none;}
+  .header {text-align:center; margin-bottom:20px;}
+  .header h1 {margin:0; color:#ff4c4c;}
+  .msg {color:#ff4c4c; text-align:center; margin:10px 0;}
+  .dashboard p {margin:6px 0; font-weight:bold;}
+  textarea {resize:none; height:60px;}
 </style>
 </head>
 <body>
 
+<!-- LOGIN / REGISTER -->
 <div class="container" id="authBox">
-  <div class="header">
-    <h1>Rida Network</h1>
-  </div>
+  <div class="header"><h1>Rida Network</h1></div>
   <div id="msg" class="msg"></div>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
@@ -31,15 +30,14 @@ button:hover {background:#ff1a1a;}
   <button id="registerBtn">Register</button>
 </div>
 
+<!-- DASHBOARD -->
 <div class="container hide" id="dashboardBox">
-  <div class="header">
-    <h1>Dashboard</h1>
-  </div>
+  <div class="header"><h1>Dashboard</h1></div>
   <p id="welcomeText"></p>
   <p>Balance: <span id="balance">0</span> Rida</p>
   <button id="mineBtn">Start Mining</button>
   <div id="adminBox" class="hide">
-    <textarea id="broadcastMsg" placeholder="Broadcast message to all users"></textarea>
+    <textarea id="broadcastMsg" placeholder="Broadcast message"></textarea>
     <button id="broadcastBtn">Send Broadcast</button>
   </div>
   <button id="logoutBtn">Logout</button>
@@ -47,30 +45,28 @@ button:hover {background:#ff1a1a;}
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxOnY0i55PVDHAvntdgbid7rmWHZWzzaWCuaHcf0XF7tEJlB72EUmiWiPRHZX9H3ZgT/exec";
+const API_URL = "YOUR_EXISTING_BACKEND_URL_HERE"; // <-- keep your working backend URL
 let currentUser = null;
 
-// Helper: show message
-function showMsg(msg,id="msg"){document.getElementById(id).innerText = msg;}
+// Show messages
+function showMsg(msg,id="msg"){document.getElementById(id).innerText=msg;}
 
-// ------------------ AUTH ------------------
+// ---------- AUTH ----------
 document.getElementById("loginBtn").onclick = () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  if(!email || !password) return showMsg("Email & Password required");
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+  if(!email||!password) return showMsg("Email & Password required");
   fetch(`${API_URL}?action=LOGIN&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
     .then(r=>r.json()).then(res=>{
-      if(res.success){
-        currentUser = res;
-        showDashboard();
-      }else showMsg(res.msg);
+      if(res.success){currentUser=res; showDashboard();}
+      else showMsg(res.msg);
     }).catch(e=>showMsg("Server error"));
 };
 
 document.getElementById("registerBtn").onclick = () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  if(!email || !password) return showMsg("Email & Password required");
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+  if(!email||!password) return showMsg("Email & Password required");
   fetch(`${API_URL}?action=REGISTER&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
     .then(r=>r.json()).then(res=>{
       if(res.success) showMsg("Registered successfully, please login");
@@ -78,48 +74,42 @@ document.getElementById("registerBtn").onclick = () => {
     }).catch(e=>showMsg("Server error"));
 };
 
-// ------------------ DASHBOARD ------------------
+// ---------- DASHBOARD ----------
 function showDashboard(){
   document.getElementById("authBox").classList.add("hide");
   document.getElementById("dashboardBox").classList.remove("hide");
-  document.getElementById("welcomeText").innerText = `Welcome, ${currentUser.uid}`;
-  document.getElementById("balance").innerText = currentUser.balance || 0;
-  // show admin controls if role=admin
-  if(currentUser.role === "admin") document.getElementById("adminBox").classList.remove("hide");
+  document.getElementById("welcomeText").innerText=`Welcome, ${currentUser.uid || currentUser.email}`;
+  document.getElementById("balance").innerText=currentUser.balance || 0;
+  if(currentUser.role==="admin") document.getElementById("adminBox").classList.remove("hide");
 }
 
 // Logout
 document.getElementById("logoutBtn").onclick = () => {
-  currentUser = null;
+  currentUser=null;
   document.getElementById("dashboardBox").classList.add("hide");
   document.getElementById("authBox").classList.remove("hide");
   showMsg("");
   document.getElementById("dashMsg").innerText="";
 };
 
-// ------------------ MINING ------------------
+// ---------- MINING ----------
 document.getElementById("mineBtn").onclick = () => {
   if(!currentUser) return;
   fetch(`${API_URL}?action=MINE&uid=${currentUser.uid}`)
     .then(r=>r.json()).then(res=>{
       document.getElementById("dashMsg").innerText=res.msg;
-      if(res.success){
-        currentUser.balance=res.balance;
-        document.getElementById("balance").innerText=res.balance;
-      }
+      if(res.success){currentUser.balance=res.balance; document.getElementById("balance").innerText=res.balance;}
     }).catch(e=>document.getElementById("dashMsg").innerText="Server error");
 };
 
-// ------------------ ADMIN BROADCAST ------------------
+// ---------- ADMIN BROADCAST ----------
 document.getElementById("broadcastBtn").onclick = () => {
-  const msg = document.getElementById("broadcastMsg").value;
+  const msg=document.getElementById("broadcastMsg").value;
   if(!msg) return;
   fetch(`${API_URL}?action=BROADCAST&uid=${currentUser.uid}&message=${encodeURIComponent(msg)}`)
-    .then(r=>r.json()).then(res=>{
-      document.getElementById("dashMsg").innerText=res.msg;
-    }).catch(e=>document.getElementById("dashMsg").innerText="Server error");
+    .then(r=>r.json()).then(res=>{document.getElementById("dashMsg").innerText=res.msg;})
+    .catch(e=>document.getElementById("dashMsg").innerText="Server error");
 };
 </script>
-
 </body>
 </html>
