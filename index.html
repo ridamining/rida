@@ -139,12 +139,6 @@
       margin: 1rem 0;
     }
 
-    .admin-badge {
-      background: #ff00ff20;
-      border-color: #ff00ff;
-      color: #ff88ff;
-    }
-
     @keyframes glow {
       0%, 100% { text-shadow: 0 0 5px cyan; }
       50% { text-shadow: 0 0 20px cyan; }
@@ -165,182 +159,10 @@
 <script>
 // ============================================
 // FRONTEND MASTER CONTROLLER
-// All business logic lives here
 // ============================================
 
-const API_URL = 'https<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>NexusMine Pro | Advanced Crypto Mining</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    }
+const API_URL = 'https://script.google.com/macros/s/AKfycbyWiI3q6QchvP4lNgD3_mPGazJ4YzNhugWF2azEmgWgj8tqkq9QIQzv_neEv67na1cf/execs';
 
-    body {
-      background: radial-gradient(circle at 10% 20%, #0a0f1e, #03050b);
-      min-height: 100vh;
-      padding: 1rem;
-    }
-
-    .app-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: rgba(12, 18, 28, 0.85);
-      backdrop-filter: blur(12px);
-      border-radius: 2rem;
-      border: 1px solid rgba(0, 255, 255, 0.3);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0, 255, 255, 0.2);
-      overflow: hidden;
-    }
-
-    .header {
-      padding: 1.5rem;
-      background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(0,0,0,0.4));
-      border-bottom: 1px solid rgba(0,255,255,0.2);
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 1.8rem;
-      background: linear-gradient(135deg, #aaffff, #2ad4ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .content {
-      padding: 1.5rem;
-    }
-
-    .card {
-      background: rgba(0, 10, 20, 0.6);
-      border-radius: 1.5rem;
-      padding: 1.2rem;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(42,212,255,0.2);
-    }
-
-    .input-group {
-      margin-bottom: 1rem;
-    }
-
-    .input-group label {
-      display: block;
-      font-size: 0.75rem;
-      color: #8aa9d1;
-      margin-bottom: 0.3rem;
-      text-transform: uppercase;
-    }
-
-    .input-group input, .input-group textarea {
-      width: 100%;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid #2a3a5a;
-      padding: 0.8rem;
-      border-radius: 1rem;
-      color: white;
-      font-size: 1rem;
-    }
-
-    button {
-      background: linear-gradient(95deg, #0e2a3b, #0a1a2f);
-      border: 1px solid #2ad4ff;
-      padding: 0.8rem 1.5rem;
-      border-radius: 1.5rem;
-      color: #ccf4ff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
-    }
-
-    button:active { transform: scale(0.98); }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .mine-btn {
-      background: radial-gradient(circle at 30% 10%, #ffb347, #ff7e05);
-      border: none;
-      font-size: 1.2rem;
-      box-shadow: 0 0 15px #ffaa33;
-    }
-
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.7rem 0;
-      border-bottom: 1px dashed #2e3f55;
-    }
-
-    .message {
-      background: rgba(0,0,0,0.5);
-      padding: 0.7rem;
-      border-radius: 1rem;
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 0.85rem;
-    }
-
-    .toggle-group {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .toggle-btn {
-      background: rgba(0,0,0,0.4);
-      border-color: #2a3a5a;
-    }
-
-    .toggle-btn.active {
-      background: #1e2a47;
-      border-color: cyan;
-      box-shadow: 0 0 8px cyan;
-    }
-
-    .mining-animation {
-      text-align: center;
-      font-size: 2rem;
-      margin: 1rem 0;
-    }
-
-    .admin-badge {
-      background: #ff00ff20;
-      border-color: #ff00ff;
-      color: #ff88ff;
-    }
-
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 5px cyan; }
-      50% { text-shadow: 0 0 20px cyan; }
-    }
-
-    .glowing { animation: glow 1s ease-in-out infinite; }
-  </style>
-</head>
-<body>
-<div class="app-container" id="app">
-  <div class="header">
-    <h1>⚡ NEXUS MINE PRO</h1>
-    <div style="font-size: 0.8rem; color: #8aa9d1;">Advanced Mining Platform</div>
-  </div>
-  <div class="content" id="mainContent"></div>
-</div>
-
-<script>
-// ============================================
-// FRONTEND MASTER CONTROLLER
-// All business logic lives here
-// ============================================
-
-const API_URL = 'https://script.google.com/macros/s/AKfycbyWiI3q6QchvP4lNgD3_mPGazJ4YzNhugWF2azEmgWgj8tqkq9QIQzv_neEv67na1cf/exec';
-
-// Core API caller
 async function callAPI(params) {
   const url = new URL(API_URL);
   Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
@@ -352,16 +174,12 @@ async function callAPI(params) {
   }
 }
 
-// User session management
 let currentSession = null;
 
-// Helper functions
 function hashPassword(pwd) {
-  // Simple hash for demo (in production use proper crypto)
   return btoa(pwd + 'salt_' + pwd.length);
 }
 
-// Save user to backend
 async function saveUserToBackend(userData) {
   return await callAPI({
     action: 'SAVE_USER',
@@ -369,7 +187,6 @@ async function saveUserToBackend(userData) {
   });
 }
 
-// Load user from backend
 async function loadUserFromBackend(email) {
   const result = await callAPI({ action: 'GET_USER', email: email });
   if (result.success && result.uid) {
@@ -386,7 +203,6 @@ async function loadUserFromBackend(email) {
   return null;
 }
 
-// Log actions
 async function logAction(actionType, uid, email, details) {
   await callAPI({
     action: 'ADD_LOG',
@@ -397,7 +213,6 @@ async function logAction(actionType, uid, email, details) {
   });
 }
 
-// Mining logic (frontend-controlled)
 const MINING_REWARD = 0.2;
 const COOLDOWN_HOURS = 24;
 
@@ -413,12 +228,10 @@ async function performMining() {
     return { success: false, msg: `⏰ Cooldown: ${remaining} hours remaining`, remaining: remaining };
   }
   
-  // Process mining
   const newBalance = currentSession.balance + MINING_REWARD;
   currentSession.balance = newBalance;
   currentSession.lastMine = new Date().toISOString();
   
-  // Save to backend
   const saveResult = await saveUserToBackend({
     email: currentSession.email,
     password: currentSession.password,
@@ -436,7 +249,6 @@ async function performMining() {
   return { success: false, msg: 'Failed to save mining result' };
 }
 
-// Register new user
 async function registerUser(email, password) {
   email = email.trim().toLowerCase();
   password = password.trim();
@@ -444,7 +256,6 @@ async function registerUser(email, password) {
   if (!email || !password) return { success: false, msg: 'Email and password required' };
   if (password.length < 4) return { success: false, msg: 'Password must be at least 4 characters' };
   
-  // Check if user exists
   const existing = await loadUserFromBackend(email);
   if (existing) return { success: false, msg: 'Email already registered' };
   
@@ -466,7 +277,6 @@ async function registerUser(email, password) {
   return { success: false, msg: 'Registration failed' };
 }
 
-// Login user
 async function loginUser(email, password) {
   email = email.trim().toLowerCase();
   password = password.trim();
@@ -481,21 +291,15 @@ async function loginUser(email, password) {
   return { success: false, msg: 'Invalid credentials' };
 }
 
-// Broadcast message (admin only)
 async function broadcastMessage(uid, message) {
   const user = await loadUserFromBackend(currentSession.email);
   if (user.role !== 'admin') return { success: false, msg: 'Admin only' };
-  
-  // Store broadcast in user's customData or separate sheet
-  // For now, log it
   await logAction('BROADCAST', uid, currentSession.email, `Broadcast: ${message}`);
   return { success: true, msg: 'Broadcast sent successfully' };
 }
 
-// UI Rendering
 function render() {
   const container = document.getElementById('mainContent');
-  
   if (!currentSession) {
     renderAuthScreen(container);
   } else {
@@ -504,7 +308,7 @@ function render() {
 }
 
 function renderAuthScreen(container) {
-  let mode = 'login'; // login or register
+  let mode = 'login';
   
   const updateForm = () => {
     container.innerHTML = `
@@ -554,7 +358,6 @@ function renderAuthScreen(container) {
 }
 
 async function renderDashboard(container) {
-  // Refresh user data
   const freshUser = await loadUserFromBackend(currentSession.email);
   if (freshUser) currentSession = freshUser;
   
@@ -594,7 +397,6 @@ async function renderDashboard(container) {
     <button id="logoutBtn" style="background:#1f1f2e; border-color:#ff5e7e;">🚪 LOGOUT</button>
   `;
   
-  // Mining logic
   document.getElementById('mineBtn')?.addEventListener('click', async () => {
     const animDiv = document.getElementById('miningAnim');
     const mineBtn = document.getElementById('mineBtn');
@@ -620,7 +422,6 @@ async function renderDashboard(container) {
     }
   });
   
-  // Broadcast logic
   if (isAdmin) {
     document.getElementById('broadcastBtn')?.addEventListener('click', async () => {
       const msg = document.getElementById('broadcastMsg').value;
@@ -635,330 +436,13 @@ async function renderDashboard(container) {
     });
   }
   
-  // Logout
   document.getElementById('logoutBtn')?.addEventListener('click', () => {
     currentSession = null;
     render();
   });
 }
 
-// Initialize app
 render();
-
-// Auto-refresh dashboard every 30 seconds
-setInterval(() => {
-  if (currentSession) render();
-}, 30000);
-</script>
-</body>
-</html>exec';
-
-// Core API caller
-async function callAPI(params) {
-  const url = new URL(API_URL);
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-  try {
-    const response = await fetch(url.toString());
-    return await response.json();
-  } catch (error) {
-    return { success: false, msg: 'Network error: ' + error.message };
-  }
-}
-
-// User session management
-let currentSession = null;
-
-// Helper functions
-function hashPassword(pwd) {
-  // Simple hash for demo (in production use proper crypto)
-  return btoa(pwd + 'salt_' + pwd.length);
-}
-
-// Save user to backend
-async function saveUserToBackend(userData) {
-  return await callAPI({
-    action: 'SAVE_USER',
-    userData: JSON.stringify(userData)
-  });
-}
-
-// Load user from backend
-async function loadUserFromBackend(email) {
-  const result = await callAPI({ action: 'GET_USER', email: email });
-  if (result.success && result.uid) {
-    return {
-      uid: result.uid,
-      email: result.email,
-      password: result.password,
-      balance: result.balance,
-      role: result.role,
-      lastMine: result.lastMine,
-      customData: JSON.parse(result.customData || '{}')
-    };
-  }
-  return null;
-}
-
-// Log actions
-async function logAction(actionType, uid, email, details) {
-  await callAPI({
-    action: 'ADD_LOG',
-    actionType: actionType,
-    uid: uid,
-    email: email,
-    details: details
-  });
-}
-
-// Mining logic (frontend-controlled)
-const MINING_REWARD = 0.2;
-const COOLDOWN_HOURS = 24;
-
-async function performMining() {
-  if (!currentSession) return { success: false, msg: 'Not logged in' };
-  
-  const now = Date.now();
-  const lastMineTime = currentSession.lastMine ? new Date(currentSession.lastMine).getTime() : 0;
-  const hoursSinceLastMine = (now - lastMineTime) / (1000 * 60 * 60);
-  
-  if (lastMineTime > 0 && hoursSinceLastMine < COOLDOWN_HOURS) {
-    const remaining = (COOLDOWN_HOURS - hoursSinceLastMine).toFixed(1);
-    return { success: false, msg: `⏰ Cooldown: ${remaining} hours remaining`, remaining: remaining };
-  }
-  
-  // Process mining
-  const newBalance = currentSession.balance + MINING_REWARD;
-  currentSession.balance = newBalance;
-  currentSession.lastMine = new Date().toISOString();
-  
-  // Save to backend
-  const saveResult = await saveUserToBackend({
-    email: currentSession.email,
-    password: currentSession.password,
-    balance: newBalance,
-    role: currentSession.role,
-    lastMine: currentSession.lastMine,
-    customData: currentSession.customData
-  });
-  
-  if (saveResult.success) {
-    await logAction('MINE', currentSession.uid, currentSession.email, `Mined ${MINING_REWARD} tokens`);
-    return { success: true, msg: `✅ Mined ${MINING_REWARD} NXM!`, newBalance: newBalance, reward: MINING_REWARD };
-  }
-  
-  return { success: false, msg: 'Failed to save mining result' };
-}
-
-// Register new user
-async function registerUser(email, password) {
-  email = email.trim().toLowerCase();
-  password = password.trim();
-  
-  if (!email || !password) return { success: false, msg: 'Email and password required' };
-  if (password.length < 4) return { success: false, msg: 'Password must be at least 4 characters' };
-  
-  // Check if user exists
-  const existing = await loadUserFromBackend(email);
-  if (existing) return { success: false, msg: 'Email already registered' };
-  
-  const hashedPass = hashPassword(password);
-  const newUser = {
-    email: email,
-    password: hashedPass,
-    balance: 0,
-    role: email === 'admin@nexus.com' ? 'admin' : 'user',
-    lastMine: '',
-    customData: { registeredAt: new Date().toISOString() }
-  };
-  
-  const result = await saveUserToBackend(newUser);
-  if (result.success) {
-    await logAction('REGISTER', result.uid, email, 'New user registered');
-    return { success: true, msg: 'Registration successful! Please login.' };
-  }
-  return { success: false, msg: 'Registration failed' };
-}
-
-// Login user
-async function loginUser(email, password) {
-  email = email.trim().toLowerCase();
-  password = password.trim();
-  const hashedPass = hashPassword(password);
-  
-  const user = await loadUserFromBackend(email);
-  if (user && user.password === hashedPass) {
-    currentSession = user;
-    await logAction('LOGIN', user.uid, email, 'User logged in');
-    return { success: true, msg: 'Login successful', user: user };
-  }
-  return { success: false, msg: 'Invalid credentials' };
-}
-
-// Broadcast message (admin only)
-async function broadcastMessage(uid, message) {
-  const user = await loadUserFromBackend(currentSession.email);
-  if (user.role !== 'admin') return { success: false, msg: 'Admin only' };
-  
-  // Store broadcast in user's customData or separate sheet
-  // For now, log it
-  await logAction('BROADCAST', uid, currentSession.email, `Broadcast: ${message}`);
-  return { success: true, msg: 'Broadcast sent successfully' };
-}
-
-// UI Rendering
-function render() {
-  const container = document.getElementById('mainContent');
-  
-  if (!currentSession) {
-    renderAuthScreen(container);
-  } else {
-    renderDashboard(container);
-  }
-}
-
-function renderAuthScreen(container) {
-  let mode = 'login'; // login or register
-  
-  const updateForm = () => {
-    container.innerHTML = `
-      <div class="toggle-group">
-        <button class="toggle-btn ${mode === 'login' ? 'active' : ''}" onclick="window.authMode='login';render()">🔐 LOGIN</button>
-        <button class="toggle-btn ${mode === 'register' ? 'active' : ''}" onclick="window.authMode='register';render()">📝 REGISTER</button>
-      </div>
-      <div class="card">
-        <div class="input-group">
-          <label>📧 EMAIL</label>
-          <input type="email" id="authEmail" placeholder="miner@example.com">
-        </div>
-        <div class="input-group">
-          <label>🔒 PASSWORD</label>
-          <input type="password" id="authPassword" placeholder="••••••••">
-        </div>
-        <button id="submitBtn">${mode === 'login' ? '⚡ LOGIN' : '✨ REGISTER'}</button>
-        <div id="authMsg" class="message"></div>
-      </div>
-    `;
-    
-    document.getElementById('submitBtn').onclick = async () => {
-      const email = document.getElementById('authEmail').value;
-      const password = document.getElementById('authPassword').value;
-      const msgDiv = document.getElementById('authMsg');
-      
-      let result;
-      if (mode === 'login') {
-        result = await loginUser(email, password);
-        if (result.success) {
-          render();
-        }
-      } else {
-        result = await registerUser(email, password);
-        if (result.success) {
-          mode = 'login';
-          updateForm();
-        }
-      }
-      if (result && !result.success) msgDiv.innerHTML = `❌ ${result.msg}`;
-    };
-  };
-  
-  window.authMode = window.authMode || 'login';
-  mode = window.authMode;
-  updateForm();
-}
-
-async function renderDashboard(container) {
-  // Refresh user data
-  const freshUser = await loadUserFromBackend(currentSession.email);
-  if (freshUser) currentSession = freshUser;
-  
-  const isAdmin = currentSession.role === 'admin';
-  const lastMineTime = currentSession.lastMine ? new Date(currentSession.lastMine).getTime() : 0;
-  const now = Date.now();
-  const canMine = !lastMineTime || (now - lastMineTime) >= (COOLDOWN_HOURS * 3600000);
-  const hoursLeft = !canMine ? ((COOLDOWN_HOURS * 3600000 - (now - lastMineTime)) / 3600000).toFixed(1) : 0;
-  
-  container.innerHTML = `
-    <div class="card">
-      <div class="stat-row"><span>💎 Wallet</span><span>${currentSession.email}</span></div>
-      <div class="stat-row"><span>🆔 UID</span><span>${currentSession.uid}</span></div>
-      <div class="stat-row"><span>💰 Balance</span><span class="glowing" id="balanceDisplay">${currentSession.balance.toFixed(4)} NXM</span></div>
-      <div class="stat-row"><span>⭐ Role</span><span>${currentSession.role.toUpperCase()}</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="mining-animation" id="miningAnim">⛏️ 💎 ⛏️</div>
-      <button class="mine-btn" id="mineBtn" ${!canMine ? 'disabled' : ''}>
-        ${canMine ? '⚡ START MINING' : `⏰ COOLDOWN (${hoursLeft}h)`}
-      </button>
-      <div id="mineMsg" class="message"></div>
-    </div>
-    
-    ${isAdmin ? `
-    <div class="card">
-      <div style="font-weight:bold; margin-bottom:10px;">📢 ADMIN BROADCAST</div>
-      <div class="input-group">
-        <textarea id="broadcastMsg" rows="2" placeholder="Enter announcement..."></textarea>
-      </div>
-      <button id="broadcastBtn">SEND BROADCAST</button>
-      <div id="broadcastMsgDiv" class="message"></div>
-    </div>
-    ` : ''}
-    
-    <button id="logoutBtn" style="background:#1f1f2e; border-color:#ff5e7e;">🚪 LOGOUT</button>
-  `;
-  
-  // Mining logic
-  document.getElementById('mineBtn')?.addEventListener('click', async () => {
-    const animDiv = document.getElementById('miningAnim');
-    const mineBtn = document.getElementById('mineBtn');
-    const msgDiv = document.getElementById('mineMsg');
-    
-    animDiv.innerHTML = '🌀 MINING IN PROGRESS 🌀';
-    mineBtn.disabled = true;
-    
-    const result = await performMining();
-    
-    if (result.success) {
-      animDiv.innerHTML = `✅ +${result.reward} NXM MINED! ✅`;
-      document.getElementById('balanceDisplay').innerText = result.newBalance.toFixed(4) + ' NXM';
-      msgDiv.innerHTML = result.msg;
-      setTimeout(() => render(), 2000);
-    } else {
-      animDiv.innerHTML = '⛏️ 💎 ⛏️';
-      msgDiv.innerHTML = result.msg;
-      mineBtn.disabled = false;
-      if (result.remaining) {
-        setTimeout(() => render(), 1000);
-      }
-    }
-  });
-  
-  // Broadcast logic
-  if (isAdmin) {
-    document.getElementById('broadcastBtn')?.addEventListener('click', async () => {
-      const msg = document.getElementById('broadcastMsg').value;
-      const result = await broadcastMessage(currentSession.uid, msg);
-      const msgDiv = document.getElementById('broadcastMsgDiv');
-      if (result.success) {
-        msgDiv.innerHTML = '✅ Broadcast sent!';
-        document.getElementById('broadcastMsg').value = '';
-      } else {
-        msgDiv.innerHTML = `❌ ${result.msg}`;
-      }
-    });
-  }
-  
-  // Logout
-  document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    currentSession = null;
-    render();
-  });
-}
-
-// Initialize app
-render();
-
-// Auto-refresh dashboard every 30 seconds
 setInterval(() => {
   if (currentSession) render();
 }, 30000);
