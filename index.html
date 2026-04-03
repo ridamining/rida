@@ -1,37 +1,486 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes"><title>NexusMine Pro | Crypto Mining</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:linear-gradient(135deg,#0a0f1e,#03050b);min-height:100vh;padding:20px}.container{max-width:1200px;margin:0 auto}.header{background:rgba(15,25,45,.95);backdrop-filter:blur(10px);border-radius:20px;padding:20px;margin-bottom:20px;border:1px solid rgba(0,255,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}.logo h1{font-size:28px;background:linear-gradient(135deg,#0fc,#09f);-webkit-background-clip:text;background-clip:text;color:transparent}.logo p{font-size:12px;color:#8aa9d1}.user-card{display:flex;align-items:center;gap:20px;background:rgba(0,0,0,.5);padding:10px 20px;border-radius:50px}.balance{font-size:20px;font-weight:700;color:#0fc}.role-badge{padding:5px 15px;border-radius:20px;font-size:12px;font-weight:700}.role-admin{background:rgba(183,110,255,.2);color:#b76eff;border:1px solid #b76eff}.role-user{background:rgba(0,255,204,.15);color:#0fc;border:1px solid #0fc}button{background:linear-gradient(95deg,#0e2a3b,#0a1a2f);border:1px solid #0fc;padding:10px 20px;border-radius:30px;color:#0fc;font-weight:700;cursor:pointer}.dashboard{display:grid;grid-template-columns:260px 1fr;gap:20px}@media(max-width:768px){.dashboard{grid-template-columns:1fr}}.sidebar{background:rgba(15,25,45,.95);backdrop-filter:blur(10px);border-radius:20px;padding:20px;border:1px solid rgba(0,255,255,.3)}.nav-item{padding:12px 16px;margin:8px 0;border-radius:12px;cursor:pointer;color:#8aa9d1}.nav-item:hover{background:rgba(0,255,204,.1);color:#0fc}.nav-item.active{background:rgba(0,255,204,.15);color:#0fc;border-left:3px solid #0fc}.content{background:rgba(15,25,45,.95);border-radius:20px;padding:25px;border:1px solid rgba(0,255,255,.3);min-height:500px}.card{background:rgba(0,0,0,.3);border-radius:16px;padding:20px;margin-bottom:20px}.card-title{font-size:18px;font-weight:700;margin-bottom:15px;color:#0fc}input,textarea{width:100%;background:rgba(0,0,0,.5);border:1px solid #2a3a5a;padding:12px;border-radius:12px;color:#fff;margin-bottom:12px}.mining-area{text-align:center;padding:30px}.mining-animation{font-size:60px;margin:20px 0}.mine-btn{background:radial-gradient(circle at 30% 10%,#ffb347,#ff7e05);border:none;padding:15px 40px;font-size:18px;font-weight:700;border-radius:50px;color:#fff;cursor:pointer}.chat-container{display:flex;flex-direction:column;height:450px}.chat-messages{flex:1;overflow-y:auto;background:rgba(0,0,0,.3);border-radius:12px;padding:15px;margin-bottom:15px}.message{margin-bottom:10px;padding:8px 12px;border-radius:12px;max-width:70%}.message-out{background:rgba(0,255,204,.2);margin-left:auto;color:#0fc}.message-in{background:rgba(255,255,255,.1);color:#fff}.chat-input{display:flex;gap:10px}.chat-input input{flex:1;margin-bottom:0}.status-verified{background:rgba(78,255,181,.2);color:#4effb5;padding:4px 10px;border-radius:12px}.status-unverified{background:rgba(255,94,126,.2);color:#ff5e7e;padding:4px 10px;border-radius:12px}.error{color:#ff5e7e}.success{color:#4effb5}.table-container{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{padding:12px;text-align:left;border-bottom:1px solid #2a3a5a}th{color:#0fc}</style></head>
-<body><div class="container" id="app"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>NexusMine | Crypto Mining</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0f1e 0%, #03050b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(15, 25, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #00ffcc, #0099ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8aa9d1;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #2a3a5a;
+            border-radius: 12px;
+            color: #8aa9d1;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .toggle-btn.active {
+            background: rgba(0, 255, 204, 0.15);
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #2a3a5a;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(95deg, #0e2a3b, #0a1a2f);
+            border: 1px solid #00ffcc;
+            border-radius: 30px;
+            color: #00ffcc;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .mine-btn {
+            background: radial-gradient(circle at 30% 10%, #ffb347, #ff7e05);
+            border: none;
+            color: white;
+            font-size: 18px;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .error {
+            background: rgba(255, 94, 126, 0.2);
+            color: #ff5e7e;
+        }
+
+        .success {
+            background: rgba(78, 255, 181, 0.2);
+            color: #4effb5;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .balance {
+            font-size: 24px;
+            color: #00ffcc;
+            font-weight: bold;
+        }
+
+        .mining-area {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .mining-animation {
+            font-size: 50px;
+            margin: 20px 0;
+        }
+
+        .info-text {
+            color: #8aa9d1;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
 <script>
-const API_URL='https://script.google.com/macros/s/AKfycbzaJ3N8ZQ8f9zwLXlbBL0P-ZurhvLr5za8kIIRRwBR3R8_WKR_3EU1I4Hv16IXpEmOz/exec';
-let currentUser=null,currentPage='mining',selectedChatUser=null,allUsers=[],messageInterval=null;
-async function api(a,d={}){let p=new URLSearchParams({action:a,...d});try{return await(await fetch(API_URL+'?'+p)).json()}catch(e){return{success:false,msg:e.message}}}
-function hashPassword(p){let h=0;for(let i=0;i<p.length;i++)h=((h<<5)-h)+p.charCodeAt(i),h&=h;return btoa(p+'_nexus_'+Math.abs(h))}
-async function register(e,p){e=e.trim().toLowerCase();p=p.trim();if(!e||!p)return{success:false,msg:'All fields required'};if(p.length<4)return{success:false,msg:'Password too short'};let ex=await api('GET_USER',{email:e});if(ex.success)return{success:false,msg:'Email exists'};let r=await api('SAVE_USER',{userData:JSON.stringify({email:e,password:hashPassword(p),balance:100,role:e==='admin@nexus.com'?'admin':'user',status:'unverified',lastMine:'',createdAt:new Date().toISOString()})});return r.success?{success:true,msg:'Registered! Please login'}:{success:false,msg:'Registration failed'}}
-async function login(e,p){e=e.trim().toLowerCase();let u=await api('GET_USER',{email:e});if(!u.success)return{success:false,msg:'User not found'};if(u.password===hashPassword(p.trim())){await api('SAVE_USER',{userData:JSON.stringify({email:u.email,lastActive:new Date().toISOString()})});return{success:true,user:u}}return{success:false,msg:'Wrong password'}}
-async function performMining(){let n=Date.now(),lm=currentUser.lastMine?new Date(currentUser.lastMine).getTime():0,hs=(n-lm)/(36e5);if(lm>0&&hs<24){let l=(24-hs).toFixed(1);return{success:false,msg:`Cooldown: ${l}h left`}}let r=0.5,nb=currentUser.balance+r,res=await api('UPDATE_USER_BALANCE',{uid:currentUser.uid,amount:r,operation:'add'});if(res.success){await api('SAVE_USER',{userData:JSON.stringify({email:currentUser.email,lastMine:new Date().toISOString()})});currentUser.balance=nb;currentUser.lastMine=new Date().toISOString();return{success:true,reward:r,newBalance:nb}}return{success:false,msg:'Mining failed'}}
-async function getAllUsers(){let r=await api('GET_ALL_USERS');if(r.success){allUsers=r.users;return r.users}return[]}
-async function updateUserBalance(u,a,o){return await api('UPDATE_USER_BALANCE',{uid:u,amount:a,operation:o})}
-async function updateUserStatus(u,s){return await api('UPDATE_USER_STATUS',{uid:u,status:s})}
-async function createAnnouncement(t,c){return await api('CREATE_ANNOUNCEMENT',{title:t,content:c,authorUID:currentUser.uid,priority:'high'})}
-async function getAnnouncements(){let r=await api('GET_ANNOUNCEMENTS');return r.success?r.announcements:[]}
-async function sendMessage(to,msg){return await api('SEND_MESSAGE',{fromUID:currentUser.uid,toUID:to,message:msg})}
-async function getMessages(w){let r=await api('GET_MESSAGES',{uid:currentUser.uid,withUID:w});return r.messages||[]}
-function showMessage(id,msg,isErr=true){let el=document.getElementById(id);if(el){el.innerHTML=`<div style="padding:10px;text-align:center" class="${isErr?'error':'success'}">${msg}</div>`;setTimeout(()=>{if(document.getElementById(id))document.getElementById(id).innerHTML=''},3000)}}
-function renderAuth(){let app=document.getElementById('app');app.innerHTML=`<div style="max-width:450px;margin:80px auto"><div class="card"><div style="text-align:center;margin-bottom:25px"><h1 style="font-size:36px;background:linear-gradient(135deg,#0fc,#09f);-webkit-background-clip:text;background-clip:text;color:transparent">⚡ NexusMine</h1><p style="color:#8aa9d1">Advanced Crypto Mining</p></div><div style="display:flex;gap:10px;margin-bottom:20px"><button id="loginTab" style="flex:1">Login</button><button id="registerTab" style="flex:1">Register</button></div><div id="authForm"><input type="email" id="email" placeholder="Email"><input type="password" id="password" placeholder="Password"><button id="submitBtn" style="width:100%;margin-top:10px">Login</button></div><div id="authMsg"></div></div></div>`;let mode='login';document.getElementById('loginTab').onclick=()=>{mode='login';document.getElementById('submitBtn').innerText='Login';document.getElementById('authMsg').innerHTML=''};document.getElementById('registerTab').onclick=()=>{mode='register';document.getElementById('submitBtn').innerText='Register';document.getElementById('authMsg').innerHTML=''};document.getElementById('submitBtn').onclick=async()=>{let e=document.getElementById('email').value,p=document.getElementById('password').value;if(mode==='login'){let r=await login(e,p);if(r.success){currentUser=r.user;renderDashboard()}else showMessage('authMsg',r.msg)}else{let r=await register(e,p);if(r.success){showMessage('authMsg',r.msg,false);document.getElementById('email').value='';document.getElementById('password').value=''}else showMessage('authMsg',r.msg)}}}
-function renderDashboard(){let app=document.getElementById('app'),isAdmin=currentUser.role==='admin';app.innerHTML=`<div class="header"><div class="logo"><h1>⚡ NexusMine Pro</h1><p>Advanced Mining Platform</p></div><div class="user-card"><span>${currentUser.email}</span><span class="balance" id="headerBalance">${currentUser.balance.toFixed(4)} NXM</span><span class="role-badge ${isAdmin?'role-admin':'role-user'}">${isAdmin?'ADMIN':'MINER'}</span><button id="logoutBtn">Logout</button></div></div><div class="dashboard"><div class="sidebar"><div class="nav-item ${currentPage==='mining'?'active':''}" data-page="mining">⛏️ Mining</div><div class="nav-item ${currentPage==='stats'?'active':''}" data-page="stats">📊 Stats</div>${isAdmin?`<div class="nav-item ${currentPage==='users'?'active':''}" data-page="users">👥 Users</div><div class="nav-item ${currentPage==='announcements'?'active':''}" data-page="announcements">📢 Announcements</div>`:''}<div class="nav-item ${currentPage==='chat'?'active':''}" data-page="chat">💬 Chat</div></div><div class="content" id="pageContent"></div></div>`;document.getElementById('logoutBtn').onclick=()=>{currentUser=null;if(messageInterval)clearInterval(messageInterval);renderAuth()};document.querySelectorAll('.nav-item').forEach(i=>{i.onclick=()=>{currentPage=i.dataset.page;renderDashboard()}});renderPageContent()}
-async function renderPageContent(){let c=document.getElementById('pageContent');if(currentPage==='mining')await renderMining(c);else if(currentPage==='stats')await renderStats(c);else if(currentPage==='users')await renderUserManagement(c);else if(currentPage==='announcements')await renderAnnouncements(c);else if(currentPage==='chat')await renderChat(c)}
-async function renderMining(c){let lm=currentUser.lastMine?new Date(currentUser.lastMine).getTime():0,can=!lm||(Date.now()-lm)>=864e5,left=!can?((864e5-(Date.now()-lm))/36e5).toFixed(1):0;c.innerHTML=`<div class="mining-area"><div class="mining-animation" id="miningAnim">⛏️ 💎 ⛏️</div><h2>Reward: 0.5 NXM</h2><p style="color:#8aa9d1">24h cooldown</p><button class="mine-btn" id="mineBtn" ${!can?'disabled':''}>${can?'⚡ START MINING':`⏰ COOLDOWN (${left}h)`}</button><div id="mineMsg"></div></div>`;document.getElementById('mineBtn')?.addEventListener('click',async()=>{let a=document.getElementById('miningAnim'),b=document.getElementById('mineBtn'),m=document.getElementById('mineMsg');a.innerHTML='🌀 MINING... 🌀';b.disabled=true;let r=await performMining();if(r.success){a.innerHTML='✅ +0.5 NXM! ✅';m.innerHTML=`<div class="success">Mined 0.5 NXM!</div>`;document.getElementById('headerBalance').innerHTML=r.newBalance.toFixed(4)+' NXM';setTimeout(()=>renderMining(c),2000)}else{a.innerHTML='⛏️ 💎 ⛏️';m.innerHTML=`<div class="error">${r.msg}</div>`;b.disabled=false;if(r.msg.includes('Cooldown'))setTimeout(()=>renderMining(c),2000)}})}
-async function renderStats(c){c.innerHTML=`<div class="card"><div class="card-title">📊 Statistics</div><div style="padding:15px 0"><div style="display:flex;justify-content:space-between;margin-bottom:15px"><span>💰 Balance</span><span style="color:#0fc;font-size:24px">${currentUser.balance.toFixed(4)} NXM</span></div><div style="display:flex;justify-content:space-between;margin-bottom:15px"><span>⏰ Last Mine</span><span>${currentUser.lastMine?new Date(currentUser.lastMine).toLocaleString():'Never'}</span></div><div style="display:flex;justify-content:space-between"><span>✅ Status</span><span class="${currentUser.status==='verified'?'status-verified':'status-unverified'}">${currentUser.status||'unverified'}</span></div></div></div>`}
-async function renderUserManagement(c){let users=await getAllUsers();c.innerHTML=`<div class="card"><div class="card-title">👥 Users</div><div class="table-container"><table><thead><tr><th>Email</th><th>Balance</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody id="usersTableBody"></tbody></table></div></div>`;let tb=document.getElementById('usersTableBody');users.forEach(u=>{let r=tb.insertRow();r.innerHTML=`<td>${u.email}</td><td>${u.balance.toFixed(4)} NXM</td><td>${u.role}</td><td><span class="${u.status==='verified'?'status-verified':'status-unverified'}">${u.status||'unverified'}</span></td><td><button class="btn-small" onclick="window.adjustBalance('${u.uid}',10,'add')">+10</button> <button class="btn-small" onclick="window.adjustBalance('${u.uid}',10,'subtract')">-10</button> <button class="btn-small" onclick="window.toggleStatus('${u.uid}','${u.status}')">${u.status==='verified'?'Unverify':'Verify'}</button></td>`})}
-window.adjustBalance=async(u,a,o)=>{await updateUserBalance(u,a,o);renderUserManagement(document.getElementById('pageContent'))};
-window.toggleStatus=async(u,s)=>{let ns=s==='verified'?'unverified':'verified';await updateUserStatus(u,ns);renderUserManagement(document.getElementById('pageContent'))};
-async function renderAnnouncements(c){let anns=await getAnnouncements();c.innerHTML=`<div class="card"><div class="card-title">📢 New Announcement</div><input type="text" id="annTitle" placeholder="Title"><textarea id="annContent" rows="3" placeholder="Content"></textarea><button id="createAnnBtn">Publish</button></div><div class="card"><div class="card-title">📢 Announcements</div><div id="announcementsList"></div></div>`;let list=document.getElementById('announcementsList');if(anns.length===0)list.innerHTML='<p style="color:#8aa9d1">No announcements</p>';else anns.reverse().forEach(a=>{list.innerHTML+=`<div style="border-bottom:1px solid #2a3a5a;padding:15px 0"><strong style="color:#0fc">📢 ${a.title}</strong><p style="margin-top:8px">${a.content}</p><small style="color:#8aa9d1">${new Date(a.timestamp).toLocaleString()}</small></div>`});document.getElementById('createAnnBtn').onclick=async()=>{let t=document.getElementById('annTitle').value,c2=document.getElementById('annContent').value;if(!t||!c2)return;await createAnnouncement(t,c2);renderAnnouncements(c)}}
-async function renderChat(c){let users=await getAllUsers(),others=users.filter(u=>u.uid!==currentUser.uid);c.innerHTML=`<div style="display:grid;grid-template-columns:250px 1fr;gap:20px"><div class="card"><div class="card-title">💬 Users</div><div id="usersList"></div></div><div class="card"><div class="card-title" id="chatTitle">Select a user</div><div class="chat-container"><div class="chat-messages" id="chatMessages"></div><div class="chat-input"><input type="text" id="messageInput" placeholder="Type..." disabled><button id="sendMsgBtn" disabled>Send</button></div></div></div></div>`;let ul=document.getElementById('usersList');others.forEach(u=>{ul.innerHTML+=`<div class="nav-item" onclick="window.selectChatUser('${u.uid}','${u.email}')">💬 ${u.email}</div>`})}
-window.selectChatUser=async(uid,email)=>{selectedChatUser={uid,email};document.getElementById('chatTitle').innerHTML=`💬 Chat with ${email}`;document.getElementById('messageInput').disabled=false;document.getElementById('sendMsgBtn').disabled=false;await loadMessages();if(messageInterval)clearInterval(messageInterval);messageInterval=setInterval(loadMessages,3000)};
-async function loadMessages(){if(!selectedChatUser)return;let msgs=await getMessages(selectedChatUser.uid),chat=document.getElementById('chatMessages');if(!chat)return;chat.innerHTML='';msgs.forEach(m=>{let out=m.fromUID===currentUser.uid;chat.innerHTML+=`<div class="message ${out?'message-out':'message-in'}" style="margin-left:${out?'auto':'0'}"><div>${escapeHtml(m.message)}</div><small style="font-size:11px;opacity:.7">${new Date(m.timestamp).toLocaleTimeString()}</small></div>`});chat.scrollTop=chat.scrollHeight}
-function escapeHtml(t){let d=document.createElement('div');d.textContent=t;return d.innerHTML}
-document.addEventListener('click',async(e)=>{if(e.target.id==='sendMsgBtn'&&selectedChatUser){let inp=document.getElementById('messageInput'),msg=inp.value.trim();if(!msg)return;let r=await sendMessage(selectedChatUser.uid,msg);if(r.success){inp.value='';await loadMessages()}}});
-setInterval(async()=>{if(currentUser){let f=await api('GET_USER',{email:currentUser.email});if(f.success){currentUser.balance=f.balance;let b=document.getElementById('headerBalance');if(b)b.innerHTML=currentUser.balance.toFixed(4)+' NXM'}}},10000);
-renderAuth();
-</script></body></html>
+// ============================================
+// IMPORTANT: REPLACE THIS WITH YOUR ACTUAL APPS SCRIPT URL
+// ============================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbzaJ3N8ZQ8f9zwLXlbBL0P-ZurhvLr5za8kIIRRwBR3R8_WKR_3EU1I4Hv16IXpEmOz/exec';
+
+// ============================================
+// STATE
+// ============================================
+let currentUser = null;
+let currentMode = 'login';
+
+// ============================================
+// API HELPER
+// ============================================
+async function callAPI(action, data = {}) {
+    const params = new URLSearchParams({ action, ...data });
+    const url = API_URL + '?' + params.toString();
+    
+    try {
+        const response = await fetch(url);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('API Error:', error);
+        return { success: false, msg: 'Network error: ' + error.message };
+    }
+}
+
+// ============================================
+// PASSWORD HASH
+// ============================================
+function hashPassword(password) {
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+        hash = ((hash << 5) - hash) + password.charCodeAt(i);
+        hash = hash & hash;
+    }
+    return btoa(password + '_nexus_' + Math.abs(hash));
+}
+
+// ============================================
+// AUTH FUNCTIONS
+// ============================================
+async function register(email, password) {
+    email = email.trim().toLowerCase();
+    password = password.trim();
+    
+    if (!email || !password) {
+        return { success: false, msg: 'All fields required' };
+    }
+    if (password.length < 4) {
+        return { success: false, msg: 'Password must be at least 4 characters' };
+    }
+    
+    // Check if user exists
+    const existing = await callAPI('GET_USER', { email });
+    if (existing.success) {
+        return { success: false, msg: 'Email already registered' };
+    }
+    
+    // Create new user
+    const result = await callAPI('SAVE_USER', {
+        userData: JSON.stringify({
+            email: email,
+            password: hashPassword(password),
+            balance: 100,
+            role: email === 'admin@nexus.com' ? 'admin' : 'user',
+            status: 'unverified',
+            lastMine: '',
+            createdAt: new Date().toISOString()
+        })
+    });
+    
+    if (result.success) {
+        return { success: true, msg: 'Registration successful! Please login.' };
+    }
+    return { success: false, msg: 'Registration failed' };
+}
+
+async function login(email, password) {
+    email = email.trim().toLowerCase();
+    password = password.trim();
+    
+    const user = await callAPI('GET_USER', { email });
+    
+    if (!user.success) {
+        return { success: false, msg: 'User not found' };
+    }
+    
+    if (user.password === hashPassword(password)) {
+        return { success: true, user: user };
+    }
+    
+    return { success: false, msg: 'Invalid password' };
+}
+
+// ============================================
+// MINING FUNCTION
+// ============================================
+async function performMining() {
+    const now = Date.now();
+    const lastMine = currentUser.lastMine ? new Date(currentUser.lastMine).getTime() : 0;
+    const hoursSince = (now - lastMine) / (1000 * 60 * 60);
+    
+    // Check cooldown (24 hours)
+    if (lastMine > 0 && hoursSince < 24) {
+        const remaining = (24 - hoursSince).toFixed(1);
+        return { success: false, msg: `Cooldown: ${remaining} hours left` };
+    }
+    
+    const reward = 0.5;
+    const newBalance = currentUser.balance + reward;
+    
+    // Update balance
+    const result = await callAPI('UPDATE_USER_BALANCE', {
+        uid: currentUser.uid,
+        amount: reward,
+        operation: 'add'
+    });
+    
+    if (result.success) {
+        // Update last mine time
+        await callAPI('SAVE_USER', {
+            userData: JSON.stringify({
+                email: currentUser.email,
+                lastMine: new Date().toISOString()
+            })
+        });
+        
+        currentUser.balance = newBalance;
+        currentUser.lastMine = new Date().toISOString();
+        
+        return { success: true, reward: reward, newBalance: newBalance };
+    }
+    
+    return { success: false, msg: 'Mining failed. Please try again.' };
+}
+
+// ============================================
+// UI RENDERING
+// ============================================
+function render() {
+    const app = document.getElementById('app');
+    
+    if (!currentUser) {
+        renderAuth(app);
+    } else {
+        renderDashboard(app);
+    }
+}
+
+function renderAuth(container) {
+    container.innerHTML = `
+        <div class="card">
+            <h1>⚡ NexusMine</h1>
+            <div class="subtitle">Advanced Crypto Mining Platform</div>
+            
+            <div class="toggle-group">
+                <div class="toggle-btn ${currentMode === 'login' ? 'active' : ''}" id="loginBtn">Login</div>
+                <div class="toggle-btn ${currentMode === 'register' ? 'active' : ''}" id="registerBtn">Register</div>
+            </div>
+            
+            <input type="email" id="email" placeholder="Email address">
+            <input type="password" id="password" placeholder="Password">
+            <button id="submitBtn">${currentMode === 'login' ? 'Login' : 'Register'}</button>
+            <div id="message" class="message"></div>
+        </div>
+    `;
+    
+    document.getElementById('loginBtn').onclick = () => {
+        currentMode = 'login';
+        render();
+    };
+    
+    document.getElementById('registerBtn').onclick = () => {
+        currentMode = 'register';
+        render();
+    };
+    
+    document.getElementById('submitBtn').onclick = async () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const msgDiv = document.getElementById('message');
+        
+        if (currentMode === 'login') {
+            const result = await login(email, password);
+            if (result.success) {
+                currentUser = result.user;
+                render();
+            } else {
+                msgDiv.innerHTML = `<div class="error">❌ ${result.msg}</div>`;
+            }
+        } else {
+            const result = await register(email, password);
+            if (result.success) {
+                msgDiv.innerHTML = `<div class="success">✅ ${result.msg}</div>`;
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                setTimeout(() => {
+                    currentMode = 'login';
+                    render();
+                }, 2000);
+            } else {
+                msgDiv.innerHTML = `<div class="error">❌ ${result.msg}</div>`;
+            }
+        }
+    };
+}
+
+function renderDashboard(container) {
+    const lastMine = currentUser.lastMine ? new Date(currentUser.lastMine).getTime() : 0;
+    const canMine = !lastMine || (Date.now() - lastMine) >= (24 * 3600000);
+    const hoursLeft = !canMine ? ((24 * 3600000 - (Date.now() - lastMine)) / 3600000).toFixed(1) : 0;
+    const isAdmin = currentUser.role === 'admin';
+    
+    container.innerHTML = `
+        <div class="card">
+            <div class="dashboard-header">
+                <div>
+                    <div>${currentUser.email}</div>
+                    <div style="font-size: 12px; color: #8aa9d1;">${currentUser.uid}</div>
+                </div>
+                <div class="balance">${currentUser.balance.toFixed(4)} NXM</div>
+            </div>
+            
+            <div class="mining-area">
+                <div class="mining-animation" id="miningAnim">⛏️ 💎 ⛏️</div>
+                <button class="mine-btn" id="mineBtn" ${!canMine ? 'disabled' : ''}>
+                    ${canMine ? '⚡ START MINING (+0.5 NXM)' : `⏰ COOLDOWN (${hoursLeft}h)`}
+                </button>
+                <div id="miningMsg" class="message"></div>
+            </div>
+            
+            ${isAdmin ? `
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #2a3a5a;">
+                <div style="color: #00ffcc; margin-bottom: 10px;">👑 Admin Panel</div>
+                <button id="adminBtn" style="background: rgba(183, 110, 255, 0.2); border-color: #b76eff; color: #b76eff;">View Admin Dashboard</button>
+            </div>
+            ` : ''}
+            
+            <div class="info-text">
+                Mining reward: 0.5 NXM per session<br>
+                Cooldown period: 24 hours
+            </div>
+            
+            <button id="logoutBtn" style="margin-top: 15px; background: rgba(255, 94, 126, 0.2); border-color: #ff5e7e; color: #ff5e7e;">
+                Logout
+            </button>
+        </div>
+    `;
+    
+    // Mining button
+    document.getElementById('mineBtn')?.addEventListener('click', async () => {
+        const anim = document.getElementById('miningAnim');
+        const btn = document.getElementById('mineBtn');
+        const msgDiv = document.getElementById('miningMsg');
+        
+        anim.innerHTML = '🌀 MINING IN PROGRESS 🌀';
+        btn.disabled = true;
+        
+        const result = await performMining();
+        
+        if (result.success) {
+            anim.innerHTML = '✅ +0.5 NXM MINED! ✅';
+            msgDiv.innerHTML = `<div class="success">Successfully mined 0.5 NXM!</div>`;
+            setTimeout(() => render(), 2000);
+        } else {
+            anim.innerHTML = '⛏️ 💎 ⛏️';
+            msgDiv.innerHTML = `<div class="error">❌ ${result.msg}</div>`;
+            btn.disabled = false;
+            if (result.msg.includes('Cooldown')) {
+                setTimeout(() => render(), 2000);
+            }
+        }
+    });
+    
+    // Admin button
+    if (isAdmin) {
+        document.getElementById('adminBtn')?.addEventListener('click', () => {
+            alert('Admin panel coming soon! You can manage users from the Google Sheet directly.');
+        });
+    }
+    
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        currentUser = null;
+        render();
+    });
+}
+
+// ============================================
+// TEST CONNECTION ON START
+// ============================================
+async function testConnection() {
+    const result = await callAPI('PING');
+    if (!result.success) {
+        const app = document.getElementById('app');
+        app.innerHTML = `
+            <div class="card">
+                <h1>⚠️ Connection Error</h1>
+                <div class="subtitle">Cannot connect to backend server</div>
+                <div class="error" style="padding: 15px; margin-top: 20px;">
+                    Please check that your Google Apps Script is deployed with "Anyone" access.
+                </div>
+                <div class="info-text" style="margin-top: 20px;">
+                    Current URL: ${API_URL.substring(0, 60)}...
+                </div>
+            </div>
+        `;
+        return false;
+    }
+    return true;
+}
+
+// ============================================
+// START APP
+// ============================================
+(async function init() {
+    const connected = await testConnection();
+    if (connected) {
+        render();
+    }
+})();
+</script>
+</body>
+</html>
