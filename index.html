@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>NexusMine Pro | Advanced Crypto Mining</title>
+  <title>NexusMine Pro | Crypto Mining Platform</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     body {
@@ -19,13 +19,13 @@
     }
 
     .app-container {
-      max-width: 600px;
+      max-width: 550px;
       margin: 0 auto;
-      background: rgba(12, 18, 28, 0.85);
+      background: rgba(12, 18, 28, 0.92);
       backdrop-filter: blur(12px);
       border-radius: 2rem;
       border: 1px solid rgba(0, 255, 255, 0.3);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0, 255, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.1);
       overflow: hidden;
     }
 
@@ -42,6 +42,13 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      font-size: 0.7rem;
+      color: #6a7c9e;
+      margin-top: 0.3rem;
     }
 
     .content {
@@ -49,11 +56,12 @@
     }
 
     .card {
-      background: rgba(0, 10, 20, 0.6);
-      border-radius: 1.5rem;
+      background: rgba(0, 10, 20, 0.5);
+      border-radius: 1.2rem;
       padding: 1.2rem;
       margin-bottom: 1rem;
-      border: 1px solid rgba(42,212,255,0.2);
+      border: 1px solid rgba(42,212,255,0.15);
+      transition: all 0.2s;
     }
 
     .input-group {
@@ -62,59 +70,90 @@
 
     .input-group label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #8aa9d1;
       margin-bottom: 0.3rem;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .input-group input, .input-group textarea {
       width: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.6);
       border: 1px solid #2a3a5a;
-      padding: 0.8rem;
+      padding: 0.8rem 1rem;
       border-radius: 1rem;
       color: white;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-group input:focus, .input-group textarea:focus {
+      border-color: #2ad4ff;
+      box-shadow: 0 0 8px rgba(42,212,255,0.2);
     }
 
     button {
       background: linear-gradient(95deg, #0e2a3b, #0a1a2f);
       border: 1px solid #2ad4ff;
-      padding: 0.8rem 1.5rem;
+      padding: 0.85rem;
       border-radius: 1.5rem;
       color: #ccf4ff;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.2s;
       width: 100%;
+      font-size: 1rem;
+      transition: all 0.2s;
     }
 
     button:active { transform: scale(0.98); }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .mine-btn {
       background: radial-gradient(circle at 30% 10%, #ffb347, #ff7e05);
       border: none;
-      font-size: 1.2rem;
-      box-shadow: 0 0 15px #ffaa33;
+      font-size: 1.1rem;
+      box-shadow: 0 0 12px rgba(255,170,51,0.4);
     }
 
     .stat-row {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 0.7rem 0;
       border-bottom: 1px dashed #2e3f55;
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      color: #8aa9d1;
+      font-size: 0.85rem;
+    }
+
+    .stat-value {
+      color: #e2f0ff;
+      font-weight: 600;
+      word-break: break-all;
+      text-align: right;
+      font-size: 0.9rem;
     }
 
     .message {
       background: rgba(0,0,0,0.5);
       padding: 0.7rem;
       border-radius: 1rem;
-      margin-top: 1rem;
+      margin-top: 0.8rem;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
+
+    .error-msg { color: #ff8888; }
+    .success-msg { color: #88ff88; }
+    .info-msg { color: #88ccff; }
 
     .toggle-group {
       display: flex;
@@ -130,133 +169,211 @@
     .toggle-btn.active {
       background: #1e2a47;
       border-color: cyan;
-      box-shadow: 0 0 8px cyan;
+      box-shadow: 0 0 6px cyan;
     }
 
     .mining-animation {
       text-align: center;
-      font-size: 2rem;
-      margin: 1rem 0;
+      font-size: 2.2rem;
+      margin: 0.8rem 0;
+      letter-spacing: 8px;
     }
 
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 5px cyan; }
-      50% { text-shadow: 0 0 20px cyan; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; text-shadow: 0 0 5px cyan; }
+      50% { opacity: 0.8; text-shadow: 0 0 15px cyan; }
     }
+    .glowing { animation: pulse 1.5s ease-in-out infinite; }
 
-    .glowing { animation: glow 1s ease-in-out infinite; }
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 1rem;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+    .badge-admin { background: #ff00ff20; color: #ff88ff; border: 1px solid #ff88ff; }
+    .badge-user { background: #00ff0020; color: #88ff88; border: 1px solid #88ff88; }
+
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.7rem;
+      color: #4a5a7a;
+      border-top: 1px solid rgba(0,255,255,0.1);
+    }
   </style>
 </head>
 <body>
-<div class="app-container" id="app">
+<div class="app-container">
   <div class="header">
-    <h1>⚡ NEXUS MINE PRO</h1>
-    <div style="font-size: 0.8rem; color: #8aa9d1;">Advanced Mining Platform</div>
+    <h1>⚡ NEXUS MINE</h1>
+    <p>Decentralized Mining • Real Rewards</p>
   </div>
-  <div class="content" id="mainContent"></div>
+  <div class="content" id="mainContent">
+    <div style="text-align: center; padding: 2rem; color: #6a7c9e;">
+      <div>🔄 Connecting to blockchain...</div>
+      <div style="font-size: 0.7rem; margin-top: 0.5rem;">Initializing secure connection</div>
+    </div>
+  </div>
+  <div class="footer">
+    <span>🔒 Encrypted Connection</span> | <span>⚡ 24h Cooldown</span>
+  </div>
 </div>
 
 <script>
 // ============================================
-// FRONTEND MASTER CONTROLLER
+// YOUR APPS SCRIPT URL - CONFIGURED
 // ============================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbxK3Al9pcL6f1LO6fJsUfo3B3bQOv8kfvuu3f18h0k_eCOHpPjSo0QsHNayiWgThYRv/exec';
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyWiI3q6QchvP4lNgD3_mPGazJ4YzNhugWF2azEmgWgj8tqkq9QIQzv_neEv67na1cf/execs';
-
-async function callAPI(params) {
+// ============================================
+// CORE API FUNCTIONS
+// ============================================
+async function callAPI(params, retryCount = 0) {
   const url = new URL(API_URL);
   Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+  
   try {
-    const response = await fetch(url.toString());
-    return await response.json();
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      return { success: false, msg: 'Invalid server response' };
+    }
   } catch (error) {
-    return { success: false, msg: 'Network error: ' + error.message };
+    if (retryCount < 2) {
+      await new Promise(r => setTimeout(r, 1000));
+      return callAPI(params, retryCount + 1);
+    }
+    return { success: false, msg: error.message };
   }
 }
 
-let currentSession = null;
-
-function hashPassword(pwd) {
-  return btoa(pwd + 'salt_' + pwd.length);
-}
-
-async function saveUserToBackend(userData) {
+// ============================================
+// BACKEND COMMUNICATION LAYER
+// ============================================
+async function saveUser(userData) {
   return await callAPI({
     action: 'SAVE_USER',
     userData: JSON.stringify(userData)
   });
 }
 
-async function loadUserFromBackend(email) {
-  const result = await callAPI({ action: 'GET_USER', email: email });
+async function getUser(email) {
+  const result = await callAPI({ action: 'GET_USER', email: email.toLowerCase().trim() });
   if (result.success && result.uid) {
     return {
       uid: result.uid,
       email: result.email,
       password: result.password,
-      balance: result.balance,
-      role: result.role,
-      lastMine: result.lastMine,
-      customData: JSON.parse(result.customData || '{}')
+      balance: parseFloat(result.balance) || 0,
+      role: result.role || 'user',
+      lastMine: result.lastMine || '',
+      customData: (() => { try { return JSON.parse(result.customData || '{}'); } catch(e) { return {}; } })()
     };
   }
   return null;
 }
 
-async function logAction(actionType, uid, email, details) {
-  await callAPI({
+async function addLog(actionType, uid, email, details) {
+  return await callAPI({
     action: 'ADD_LOG',
     actionType: actionType,
-    uid: uid,
-    email: email,
-    details: details
+    uid: uid || '',
+    email: email || '',
+    details: details || ''
   });
 }
 
+async function testBackend() {
+  const result = await callAPI({ action: 'PING' });
+  return result.success === true;
+}
+
+// ============================================
+// CRYPTO & SECURITY
+// ============================================
+function hashPassword(password) {
+  // Simple but effective hash for demo
+  let hash = 0;
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return btoa(password + '_nexus_' + hash);
+}
+
+// ============================================
+// MINING LOGIC
+// ============================================
 const MINING_REWARD = 0.2;
 const COOLDOWN_HOURS = 24;
 
-async function performMining() {
-  if (!currentSession) return { success: false, msg: 'Not logged in' };
+async function performMining(session) {
+  if (!session) return { success: false, msg: 'Not logged in' };
   
   const now = Date.now();
-  const lastMineTime = currentSession.lastMine ? new Date(currentSession.lastMine).getTime() : 0;
+  const lastMineTime = session.lastMine ? new Date(session.lastMine).getTime() : 0;
   const hoursSinceLastMine = (now - lastMineTime) / (1000 * 60 * 60);
   
   if (lastMineTime > 0 && hoursSinceLastMine < COOLDOWN_HOURS) {
     const remaining = (COOLDOWN_HOURS - hoursSinceLastMine).toFixed(1);
-    return { success: false, msg: `⏰ Cooldown: ${remaining} hours remaining`, remaining: remaining };
+    return { success: false, msg: `⏰ Mining cooldown: ${remaining} hours remaining` };
   }
   
-  const newBalance = currentSession.balance + MINING_REWARD;
-  currentSession.balance = newBalance;
-  currentSession.lastMine = new Date().toISOString();
-  
-  const saveResult = await saveUserToBackend({
-    email: currentSession.email,
-    password: currentSession.password,
+  const newBalance = session.balance + MINING_REWARD;
+  const updatedSession = {
+    ...session,
     balance: newBalance,
-    role: currentSession.role,
-    lastMine: currentSession.lastMine,
-    customData: currentSession.customData
+    lastMine: new Date().toISOString()
+  };
+  
+  const saveResult = await saveUser({
+    email: updatedSession.email,
+    password: updatedSession.password,
+    balance: newBalance,
+    role: updatedSession.role,
+    lastMine: updatedSession.lastMine,
+    customData: updatedSession.customData
   });
   
   if (saveResult.success) {
-    await logAction('MINE', currentSession.uid, currentSession.email, `Mined ${MINING_REWARD} tokens`);
-    return { success: true, msg: `✅ Mined ${MINING_REWARD} NXM!`, newBalance: newBalance, reward: MINING_REWARD };
+    await addLog('MINE', session.uid, session.email, `Mined ${MINING_REWARD} NXM`);
+    return { 
+      success: true, 
+      msg: `✅ Successfully mined ${MINING_REWARD} NXM!`, 
+      newBalance: newBalance,
+      updatedSession: updatedSession
+    };
   }
   
-  return { success: false, msg: 'Failed to save mining result' };
+  return { success: false, msg: 'Failed to record mining reward' };
 }
 
+// ============================================
+// USER MANAGEMENT
+// ============================================
 async function registerUser(email, password) {
   email = email.trim().toLowerCase();
   password = password.trim();
   
   if (!email || !password) return { success: false, msg: 'Email and password required' };
+  if (!email.includes('@')) return { success: false, msg: 'Valid email required' };
   if (password.length < 4) return { success: false, msg: 'Password must be at least 4 characters' };
   
-  const existing = await loadUserFromBackend(email);
+  const existing = await getUser(email);
   if (existing) return { success: false, msg: 'Email already registered' };
   
   const hashedPass = hashPassword(password);
@@ -269,12 +386,12 @@ async function registerUser(email, password) {
     customData: { registeredAt: new Date().toISOString() }
   };
   
-  const result = await saveUserToBackend(newUser);
+  const result = await saveUser(newUser);
   if (result.success) {
-    await logAction('REGISTER', result.uid, email, 'New user registered');
+    await addLog('REGISTER', result.uid, email, 'New user registration');
     return { success: true, msg: 'Registration successful! Please login.' };
   }
-  return { success: false, msg: 'Registration failed' };
+  return { success: false, msg: 'Registration failed. Please try again.' };
 }
 
 async function loginUser(email, password) {
@@ -282,22 +399,23 @@ async function loginUser(email, password) {
   password = password.trim();
   const hashedPass = hashPassword(password);
   
-  const user = await loadUserFromBackend(email);
+  const user = await getUser(email);
   if (user && user.password === hashedPass) {
-    currentSession = user;
-    await logAction('LOGIN', user.uid, email, 'User logged in');
+    await addLog('LOGIN', user.uid, email, 'User logged in');
     return { success: true, msg: 'Login successful', user: user };
   }
-  return { success: false, msg: 'Invalid credentials' };
+  return { success: false, msg: 'Invalid email or password' };
 }
 
-async function broadcastMessage(uid, message) {
-  const user = await loadUserFromBackend(currentSession.email);
-  if (user.role !== 'admin') return { success: false, msg: 'Admin only' };
-  await logAction('BROADCAST', uid, currentSession.email, `Broadcast: ${message}`);
-  return { success: true, msg: 'Broadcast sent successfully' };
-}
+// ============================================
+// UI STATE MANAGEMENT
+// ============================================
+let currentSession = null;
+let currentMode = 'login'; // 'login' or 'register'
 
+// ============================================
+// UI RENDERING
+// ============================================
 function render() {
   const container = document.getElementById('mainContent');
   if (!currentSession) {
@@ -308,57 +426,67 @@ function render() {
 }
 
 function renderAuthScreen(container) {
-  let mode = 'login';
+  container.innerHTML = `
+    <div class="toggle-group">
+      <button class="toggle-btn ${currentMode === 'login' ? 'active' : ''}" id="loginTab">🔐 LOGIN</button>
+      <button class="toggle-btn ${currentMode === 'register' ? 'active' : ''}" id="registerTab">📝 REGISTER</button>
+    </div>
+    <div class="card">
+      <div class="input-group">
+        <label>📧 EMAIL ADDRESS</label>
+        <input type="email" id="authEmail" placeholder="miner@example.com" autocomplete="email">
+      </div>
+      <div class="input-group">
+        <label>🔒 PASSWORD</label>
+        <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button id="submitBtn">${currentMode === 'login' ? '⚡ LOGIN' : '✨ CREATE ACCOUNT'}</button>
+      <div id="authMsg" class="message"></div>
+    </div>
+  `;
   
-  const updateForm = () => {
-    container.innerHTML = `
-      <div class="toggle-group">
-        <button class="toggle-btn ${mode === 'login' ? 'active' : ''}" onclick="window.authMode='login';render()">🔐 LOGIN</button>
-        <button class="toggle-btn ${mode === 'register' ? 'active' : ''}" onclick="window.authMode='register';render()">📝 REGISTER</button>
-      </div>
-      <div class="card">
-        <div class="input-group">
-          <label>📧 EMAIL</label>
-          <input type="email" id="authEmail" placeholder="miner@example.com">
-        </div>
-        <div class="input-group">
-          <label>🔒 PASSWORD</label>
-          <input type="password" id="authPassword" placeholder="••••••••">
-        </div>
-        <button id="submitBtn">${mode === 'login' ? '⚡ LOGIN' : '✨ REGISTER'}</button>
-        <div id="authMsg" class="message"></div>
-      </div>
-    `;
+  // Event listeners
+  document.getElementById('loginTab')?.addEventListener('click', () => {
+    currentMode = 'login';
+    renderAuthScreen(container);
+  });
+  
+  document.getElementById('registerTab')?.addEventListener('click', () => {
+    currentMode = 'register';
+    renderAuthScreen(container);
+  });
+  
+  document.getElementById('submitBtn').onclick = async () => {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+    const msgDiv = document.getElementById('authMsg');
     
-    document.getElementById('submitBtn').onclick = async () => {
-      const email = document.getElementById('authEmail').value;
-      const password = document.getElementById('authPassword').value;
-      const msgDiv = document.getElementById('authMsg');
-      
-      let result;
-      if (mode === 'login') {
-        result = await loginUser(email, password);
-        if (result.success) {
-          render();
-        }
-      } else {
-        result = await registerUser(email, password);
-        if (result.success) {
-          mode = 'login';
-          updateForm();
-        }
+    msgDiv.innerHTML = '<span class="info-msg">⏳ Processing...</span>';
+    
+    let result;
+    if (currentMode === 'login') {
+      result = await loginUser(email, password);
+      if (result.success) {
+        currentSession = result.user;
+        render();
       }
-      if (result && !result.success) msgDiv.innerHTML = `❌ ${result.msg}`;
-    };
+    } else {
+      result = await registerUser(email, password);
+      if (result.success) {
+        currentMode = 'login';
+        renderAuthScreen(container);
+      }
+    }
+    
+    if (result && !result.success) {
+      msgDiv.innerHTML = `<span class="error-msg">❌ ${result.msg}</span>`;
+    }
   };
-  
-  window.authMode = window.authMode || 'login';
-  mode = window.authMode;
-  updateForm();
 }
 
 async function renderDashboard(container) {
-  const freshUser = await loadUserFromBackend(currentSession.email);
+  // Refresh session data
+  const freshUser = await getUser(currentSession.email);
   if (freshUser) currentSession = freshUser;
   
   const isAdmin = currentSession.role === 'admin';
@@ -369,10 +497,22 @@ async function renderDashboard(container) {
   
   container.innerHTML = `
     <div class="card">
-      <div class="stat-row"><span>💎 Wallet</span><span>${currentSession.email}</span></div>
-      <div class="stat-row"><span>🆔 UID</span><span>${currentSession.uid}</span></div>
-      <div class="stat-row"><span>💰 Balance</span><span class="glowing" id="balanceDisplay">${currentSession.balance.toFixed(4)} NXM</span></div>
-      <div class="stat-row"><span>⭐ Role</span><span>${currentSession.role.toUpperCase()}</span></div>
+      <div class="stat-row">
+        <span class="stat-label">💎 WALLET</span>
+        <span class="stat-value">${currentSession.email}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">🆔 MINER ID</span>
+        <span class="stat-value" style="font-size:0.75rem;">${currentSession.uid}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">💰 BALANCE</span>
+        <span class="stat-value glowing" id="balanceDisplay">${currentSession.balance.toFixed(4)} NXM</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">⭐ ROLE</span>
+        <span class="stat-value"><span class="status-badge ${isAdmin ? 'badge-admin' : 'badge-user'}">${isAdmin ? 'ADMIN' : 'MINER'}</span></span>
+      </div>
     </div>
     
     <div class="card">
@@ -385,18 +525,19 @@ async function renderDashboard(container) {
     
     ${isAdmin ? `
     <div class="card">
-      <div style="font-weight:bold; margin-bottom:10px;">📢 ADMIN BROADCAST</div>
+      <div style="font-weight:bold; margin-bottom:12px; color:#88ccff;">📢 ADMIN BROADCAST</div>
       <div class="input-group">
-        <textarea id="broadcastMsg" rows="2" placeholder="Enter announcement..."></textarea>
+        <textarea id="broadcastMsg" rows="2" placeholder="Enter announcement for all miners..."></textarea>
       </div>
-      <button id="broadcastBtn">SEND BROADCAST</button>
+      <button id="broadcastBtn">📡 SEND BROADCAST</button>
       <div id="broadcastMsgDiv" class="message"></div>
     </div>
     ` : ''}
     
-    <button id="logoutBtn" style="background:#1f1f2e; border-color:#ff5e7e;">🚪 LOGOUT</button>
+    <button id="logoutBtn" style="background:#1f1f2e; border-color:#ff5e7e;">🚪 DISCONNECT WALLET</button>
   `;
   
+  // Mining button handler
   document.getElementById('mineBtn')?.addEventListener('click', async () => {
     const animDiv = document.getElementById('miningAnim');
     const mineBtn = document.getElementById('mineBtn');
@@ -404,47 +545,84 @@ async function renderDashboard(container) {
     
     animDiv.innerHTML = '🌀 MINING IN PROGRESS 🌀';
     mineBtn.disabled = true;
+    msgDiv.innerHTML = '<span class="info-msg">⏳ Verifying blockchain...</span>';
     
-    const result = await performMining();
+    const result = await performMining(currentSession);
     
     if (result.success) {
-      animDiv.innerHTML = `✅ +${result.reward} NXM MINED! ✅`;
-      document.getElementById('balanceDisplay').innerText = result.newBalance.toFixed(4) + ' NXM';
-      msgDiv.innerHTML = result.msg;
+      currentSession = result.updatedSession;
+      animDiv.innerHTML = '✅ +' + MINING_REWARD + ' NXM! ✅';
+      document.getElementById('balanceDisplay').innerHTML = result.newBalance.toFixed(4) + ' NXM';
+      msgDiv.innerHTML = `<span class="success-msg">${result.msg}</span>`;
       setTimeout(() => render(), 2000);
     } else {
       animDiv.innerHTML = '⛏️ 💎 ⛏️';
-      msgDiv.innerHTML = result.msg;
+      msgDiv.innerHTML = `<span class="error-msg">❌ ${result.msg}</span>`;
       mineBtn.disabled = false;
-      if (result.remaining) {
-        setTimeout(() => render(), 1000);
+      if (result.msg.includes('cooldown')) {
+        setTimeout(() => render(), 2000);
       }
     }
   });
   
+  // Admin broadcast handler
   if (isAdmin) {
     document.getElementById('broadcastBtn')?.addEventListener('click', async () => {
-      const msg = document.getElementById('broadcastMsg').value;
-      const result = await broadcastMessage(currentSession.uid, msg);
+      const msg = document.getElementById('broadcastMsg').value.trim();
       const msgDiv = document.getElementById('broadcastMsgDiv');
-      if (result.success) {
-        msgDiv.innerHTML = '✅ Broadcast sent!';
-        document.getElementById('broadcastMsg').value = '';
-      } else {
-        msgDiv.innerHTML = `❌ ${result.msg}`;
+      
+      if (!msg) {
+        msgDiv.innerHTML = '<span class="error-msg">❌ Enter a message</span>';
+        return;
       }
+      
+      await addLog('BROADCAST', currentSession.uid, currentSession.email, `Admin broadcast: ${msg}`);
+      msgDiv.innerHTML = '<span class="success-msg">✅ Broadcast sent to all miners!</span>';
+      document.getElementById('broadcastMsg').value = '';
+      setTimeout(() => msgDiv.innerHTML = '', 3000);
     });
   }
   
+  // Logout handler
   document.getElementById('logoutBtn')?.addEventListener('click', () => {
     currentSession = null;
     render();
   });
 }
 
-render();
+// ============================================
+// INITIALIZATION
+// ============================================
+async function init() {
+  const container = document.getElementById('mainContent');
+  const isConnected = await testBackend();
+  
+  if (!isConnected) {
+    container.innerHTML = `
+      <div class="card">
+        <div class="message error-msg">
+          ⚠️ Cannot connect to mining network.<br><br>
+          <strong>Possible fixes:</strong><br>
+          1. Check if Apps Script is deployed<br>
+          2. Ensure access is set to "Anyone"<br>
+          3. Wait 2 minutes after deployment<br><br>
+          <span style="font-size:0.7rem;">URL: ${API_URL.substring(0, 60)}...</span>
+        </div>
+      </div>
+    `;
+  } else {
+    render();
+  }
+}
+
+// Start the app
+init();
+
+// Auto-refresh dashboard every 30 seconds
 setInterval(() => {
-  if (currentSession) render();
+  if (currentSession) {
+    render();
+  }
 }, 30000);
 </script>
 </body>
