@@ -3,41 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>NexusMine Pro | Crypto Mining Platform</title>
+  <title>NexusMine | Crypto Mining Platform</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     }
 
     body {
       background: radial-gradient(circle at 10% 20%, #0a0f1e, #03050b);
       min-height: 100vh;
-      padding: 1rem;
+      padding: 16px;
     }
 
     .app-container {
-      max-width: 550px;
+      max-width: 520px;
       margin: 0 auto;
-      background: rgba(12, 18, 28, 0.92);
+    }
+
+    /* Cards & Glassmorphism */
+    .card {
+      background: rgba(12, 18, 28, 0.85);
       backdrop-filter: blur(12px);
-      border-radius: 2rem;
-      border: 1px solid rgba(0, 255, 255, 0.3);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.1);
-      overflow: hidden;
+      border-radius: 28px;
+      padding: 24px 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease;
     }
 
     .header {
-      padding: 1.5rem;
-      background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(0,0,0,0.4));
-      border-bottom: 1px solid rgba(0,255,255,0.2);
       text-align: center;
+      margin-bottom: 24px;
     }
 
     .header h1 {
-      font-size: 1.8rem;
+      font-size: 2rem;
       background: linear-gradient(135deg, #aaffff, #2ad4ff);
       -webkit-background-clip: text;
       background-clip: text;
@@ -46,82 +50,84 @@
     }
 
     .header p {
-      font-size: 0.7rem;
-      color: #6a7c9e;
-      margin-top: 0.3rem;
+      font-size: 0.75rem;
+      color: #7e8cac;
+      margin-top: 6px;
     }
 
-    .content {
-      padding: 1.5rem;
-    }
-
-    .card {
-      background: rgba(0, 10, 20, 0.5);
-      border-radius: 1.2rem;
-      padding: 1.2rem;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(42,212,255,0.15);
-      transition: all 0.2s;
-    }
-
+    /* Inputs */
     .input-group {
-      margin-bottom: 1rem;
+      margin-bottom: 18px;
     }
 
     .input-group label {
       display: block;
       font-size: 0.7rem;
-      color: #8aa9d1;
-      margin-bottom: 0.3rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      color: #8aa9d1;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
     }
 
-    .input-group input, .input-group textarea {
+    .input-group input,
+    .input-group textarea {
       width: 100%;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid #2a3a5a;
-      padding: 0.8rem 1rem;
-      border-radius: 1rem;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid #2e3f5a;
+      padding: 14px 16px;
+      border-radius: 20px;
       color: white;
       font-size: 0.95rem;
       outline: none;
       transition: all 0.2s;
     }
 
-    .input-group input:focus, .input-group textarea:focus {
+    .input-group input:focus,
+    .input-group textarea:focus {
       border-color: #2ad4ff;
-      box-shadow: 0 0 8px rgba(42,212,255,0.2);
+      box-shadow: 0 0 10px rgba(42, 212, 255, 0.3);
     }
 
+    /* Buttons */
     button {
+      width: 100%;
       background: linear-gradient(95deg, #0e2a3b, #0a1a2f);
       border: 1px solid #2ad4ff;
-      padding: 0.85rem;
-      border-radius: 1.5rem;
+      padding: 14px;
+      border-radius: 40px;
       color: #ccf4ff;
       font-weight: bold;
-      cursor: pointer;
-      width: 100%;
       font-size: 1rem;
-      transition: all 0.2s;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 8px;
     }
 
-    button:active { transform: scale(0.98); }
-    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
 
     .mine-btn {
       background: radial-gradient(circle at 30% 10%, #ffb347, #ff7e05);
       border: none;
-      font-size: 1.1rem;
-      box-shadow: 0 0 12px rgba(255,170,51,0.4);
+      font-size: 1.2rem;
+      box-shadow: 0 0 12px rgba(255, 170, 51, 0.5);
+      color: #0a0f1a;
     }
 
+    /* Stats */
     .stat-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.7rem 0;
+      padding: 12px 0;
       border-bottom: 1px dashed #2e3f55;
     }
 
@@ -135,495 +141,513 @@
     }
 
     .stat-value {
-      color: #e2f0ff;
+      color: #eef5ff;
       font-weight: 600;
       word-break: break-all;
       text-align: right;
-      font-size: 0.9rem;
     }
 
+    /* Messages */
     .message {
-      background: rgba(0,0,0,0.5);
-      padding: 0.7rem;
-      border-radius: 1rem;
-      margin-top: 0.8rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 18px;
+      margin-top: 14px;
       text-align: center;
       font-size: 0.8rem;
     }
 
-    .error-msg { color: #ff8888; }
-    .success-msg { color: #88ff88; }
-    .info-msg { color: #88ccff; }
+    .error-msg {
+      color: #ff9e8f;
+    }
 
+    .success-msg {
+      color: #8effc2;
+    }
+
+    .info-msg {
+      color: #8fcbff;
+    }
+
+    /* Toggle */
     .toggle-group {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
     .toggle-btn {
-      background: rgba(0,0,0,0.4);
-      border-color: #2a3a5a;
+      background: rgba(0, 0, 0, 0.5);
+      border-color: #3e4f6a;
+      margin-top: 0;
     }
 
     .toggle-btn.active {
       background: #1e2a47;
-      border-color: cyan;
+      border-color: #2ad4ff;
       box-shadow: 0 0 6px cyan;
     }
 
+    /* Mining animation */
     .mining-animation {
       text-align: center;
-      font-size: 2.2rem;
-      margin: 0.8rem 0;
-      letter-spacing: 8px;
+      font-size: 2.5rem;
+      margin: 12px 0;
+      letter-spacing: 6px;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; text-shadow: 0 0 5px cyan; }
-      50% { opacity: 0.8; text-shadow: 0 0 15px cyan; }
+    @keyframes pulseGlow {
+      0%, 100% {
+        text-shadow: 0 0 2px cyan;
+      }
+      50% {
+        text-shadow: 0 0 14px cyan;
+      }
     }
-    .glowing { animation: pulse 1.5s ease-in-out infinite; }
 
-    .status-badge {
+    .glow-text {
+      animation: pulseGlow 1.2s ease-in-out infinite;
+    }
+
+    .badge {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 1rem;
+      padding: 4px 12px;
+      border-radius: 40px;
       font-size: 0.7rem;
       font-weight: bold;
     }
-    .badge-admin { background: #ff00ff20; color: #ff88ff; border: 1px solid #ff88ff; }
-    .badge-user { background: #00ff0020; color: #88ff88; border: 1px solid #88ff88; }
+
+    .badge-admin {
+      background: rgba(255, 0, 255, 0.2);
+      color: #f0a3ff;
+      border: 1px solid #f0a3ff;
+    }
+
+    .badge-user {
+      background: rgba(0, 255, 200, 0.15);
+      color: #7effe0;
+      border: 1px solid #7effe0;
+    }
 
     .footer {
       text-align: center;
-      padding: 1rem;
-      font-size: 0.7rem;
-      color: #4a5a7a;
-      border-top: 1px solid rgba(0,255,255,0.1);
+      font-size: 0.65rem;
+      color: #4f5e7e;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-<div class="app-container">
+<div class="app-container" id="appRoot">
   <div class="header">
     <h1>⚡ NEXUS MINE</h1>
-    <p>Decentralized Mining • Real Rewards</p>
+    <p>decentralized · mine & earn</p>
   </div>
-  <div class="content" id="mainContent">
-    <div style="text-align: center; padding: 2rem; color: #6a7c9e;">
-      <div>🔄 Connecting to blockchain...</div>
-      <div style="font-size: 0.7rem; margin-top: 0.5rem;">Initializing secure connection</div>
+  <div id="dynamicPanel">
+    <div class="card" style="text-align: center;">
+      <div>🔄 Initializing secure connection...</div>
+      <div style="font-size: 0.7rem; margin-top: 10px;">Contacting mining network</div>
     </div>
   </div>
   <div class="footer">
-    <span>🔒 Encrypted Connection</span> | <span>⚡ 24h Cooldown</span>
+    🔒 24h cooldown | 💎 0.2 NXM per mine
   </div>
 </div>
 
 <script>
-// ============================================
-// YOUR APPS SCRIPT URL - CONFIGURED
-// ============================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbxK3Al9pcL6f1LO6fJsUfo3B3bQOv8kfvuu3f18h0k_eCOHpPjSo0QsHNayiWgThYRv/exec';
+  // ============================================================
+  // YOUR GOOGLE APPS SCRIPT WEB APP URL (fixed, never change)
+  // ============================================================
+  const API_BASE_URL = "https://script.google.com/macros/s/AKfycbyALBxEeRVOeDZPXjRZzDJ2EsyWUloftbada53L60dkz4H4_BaHogfnVh8anTUb5s7v/exec";
 
-// ============================================
-// CORE API FUNCTIONS
-// ============================================
-async function callAPI(params, retryCount = 0) {
-  const url = new URL(API_URL);
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-  
-  try {
-    const response = await fetch(url.toString(), {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache'
+  // ============================================================
+  // HELPER: API CALL (with timeout & retry)
+  // ============================================================
+  async function callApi(params, retries = 1) {
+    const url = new URL(API_BASE_URL);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000);
+        const response = await fetch(url.toString(), {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-cache',
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        const text = await response.text();
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          return { success: false, msg: "Invalid server response" };
+        }
+      } catch (err) {
+        if (attempt === retries) {
+          return { success: false, msg: err.message || "Network error" };
+        }
+        await new Promise(r => setTimeout(r, 800));
+      }
+    }
+  }
+
+  // ============================================================
+  // SIMPLE HASH (consistent, no backend changes)
+  // ============================================================
+  function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return btoa(str + "_" + Math.abs(hash));
+  }
+
+  // ============================================================
+  // CORE BUSINESS LOGIC (ALL FRONTEND)
+  // ============================================================
+  let currentUser = null;       // stores session
+  let activeAuthMode = "login"; // 'login' or 'register'
+
+  // --- Backend helpers (using generic SAVE_USER / GET_USER) ---
+  async function saveUserToBackend(userObj) {
+    return await callApi({
+      action: "SAVE_USER",
+      userData: JSON.stringify(userObj)
     });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    
-    const text = await response.text();
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      return { success: false, msg: 'Invalid server response' };
-    }
-  } catch (error) {
-    if (retryCount < 2) {
-      await new Promise(r => setTimeout(r, 1000));
-      return callAPI(params, retryCount + 1);
-    }
-    return { success: false, msg: error.message };
   }
-}
 
-// ============================================
-// BACKEND COMMUNICATION LAYER
-// ============================================
-async function saveUser(userData) {
-  return await callAPI({
-    action: 'SAVE_USER',
-    userData: JSON.stringify(userData)
-  });
-}
+  async function loadUserFromBackend(email) {
+    const res = await callApi({ action: "GET_USER", email: email.toLowerCase().trim() });
+    if (res.success && res.uid) {
+      return {
+        uid: res.uid,
+        email: res.email,
+        password: res.password,
+        balance: Number(res.balance) || 0,
+        role: res.role || "user",
+        lastMine: res.lastMine || "",
+        createdAt: res.createdAt || ""
+      };
+    }
+    return null;
+  }
 
-async function getUser(email) {
-  const result = await callAPI({ action: 'GET_USER', email: email.toLowerCase().trim() });
-  if (result.success && result.uid) {
-    return {
-      uid: result.uid,
-      email: result.email,
-      password: result.password,
-      balance: parseFloat(result.balance) || 0,
-      role: result.role || 'user',
-      lastMine: result.lastMine || '',
-      customData: (() => { try { return JSON.parse(result.customData || '{}'); } catch(e) { return {}; } })()
+  async function addLogEntry(actionType, uid, email, details) {
+    await callApi({
+      action: "ADD_LOG",
+      actionType: actionType,
+      uid: uid || "",
+      email: email || "",
+      details: details || ""
+    });
+  }
+
+  // --- Register logic ---
+  async function registerUser(email, password) {
+    email = email.trim().toLowerCase();
+    password = password.trim();
+    if (!email || !password) return { ok: false, msg: "Email and password required" };
+    if (!email.includes("@")) return { ok: false, msg: "Enter a valid email" };
+    if (password.length < 4) return { ok: false, msg: "Password must be at least 4 characters" };
+
+    const existing = await loadUserFromBackend(email);
+    if (existing) return { ok: false, msg: "Email already registered" };
+
+    const hashedPass = simpleHash(password);
+    const newUser = {
+      email: email,
+      password: hashedPass,
+      balance: 0,
+      role: email === "admin@nexus.com" ? "admin" : "user",
+      lastMine: "",
+      createdAt: new Date().toISOString()
     };
-  }
-  return null;
-}
 
-async function addLog(actionType, uid, email, details) {
-  return await callAPI({
-    action: 'ADD_LOG',
-    actionType: actionType,
-    uid: uid || '',
-    email: email || '',
-    details: details || ''
-  });
-}
-
-async function testBackend() {
-  const result = await callAPI({ action: 'PING' });
-  return result.success === true;
-}
-
-// ============================================
-// CRYPTO & SECURITY
-// ============================================
-function hashPassword(password) {
-  // Simple but effective hash for demo
-  let hash = 0;
-  for (let i = 0; i < password.length; i++) {
-    const char = password.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return btoa(password + '_nexus_' + hash);
-}
-
-// ============================================
-// MINING LOGIC
-// ============================================
-const MINING_REWARD = 0.2;
-const COOLDOWN_HOURS = 24;
-
-async function performMining(session) {
-  if (!session) return { success: false, msg: 'Not logged in' };
-  
-  const now = Date.now();
-  const lastMineTime = session.lastMine ? new Date(session.lastMine).getTime() : 0;
-  const hoursSinceLastMine = (now - lastMineTime) / (1000 * 60 * 60);
-  
-  if (lastMineTime > 0 && hoursSinceLastMine < COOLDOWN_HOURS) {
-    const remaining = (COOLDOWN_HOURS - hoursSinceLastMine).toFixed(1);
-    return { success: false, msg: `⏰ Mining cooldown: ${remaining} hours remaining` };
-  }
-  
-  const newBalance = session.balance + MINING_REWARD;
-  const updatedSession = {
-    ...session,
-    balance: newBalance,
-    lastMine: new Date().toISOString()
-  };
-  
-  const saveResult = await saveUser({
-    email: updatedSession.email,
-    password: updatedSession.password,
-    balance: newBalance,
-    role: updatedSession.role,
-    lastMine: updatedSession.lastMine,
-    customData: updatedSession.customData
-  });
-  
-  if (saveResult.success) {
-    await addLog('MINE', session.uid, session.email, `Mined ${MINING_REWARD} NXM`);
-    return { 
-      success: true, 
-      msg: `✅ Successfully mined ${MINING_REWARD} NXM!`, 
-      newBalance: newBalance,
-      updatedSession: updatedSession
-    };
-  }
-  
-  return { success: false, msg: 'Failed to record mining reward' };
-}
-
-// ============================================
-// USER MANAGEMENT
-// ============================================
-async function registerUser(email, password) {
-  email = email.trim().toLowerCase();
-  password = password.trim();
-  
-  if (!email || !password) return { success: false, msg: 'Email and password required' };
-  if (!email.includes('@')) return { success: false, msg: 'Valid email required' };
-  if (password.length < 4) return { success: false, msg: 'Password must be at least 4 characters' };
-  
-  const existing = await getUser(email);
-  if (existing) return { success: false, msg: 'Email already registered' };
-  
-  const hashedPass = hashPassword(password);
-  const newUser = {
-    email: email,
-    password: hashedPass,
-    balance: 0,
-    role: email === 'admin@nexus.com' ? 'admin' : 'user',
-    lastMine: '',
-    customData: { registeredAt: new Date().toISOString() }
-  };
-  
-  const result = await saveUser(newUser);
-  if (result.success) {
-    await addLog('REGISTER', result.uid, email, 'New user registration');
-    return { success: true, msg: 'Registration successful! Please login.' };
-  }
-  return { success: false, msg: 'Registration failed. Please try again.' };
-}
-
-async function loginUser(email, password) {
-  email = email.trim().toLowerCase();
-  password = password.trim();
-  const hashedPass = hashPassword(password);
-  
-  const user = await getUser(email);
-  if (user && user.password === hashedPass) {
-    await addLog('LOGIN', user.uid, email, 'User logged in');
-    return { success: true, msg: 'Login successful', user: user };
-  }
-  return { success: false, msg: 'Invalid email or password' };
-}
-
-// ============================================
-// UI STATE MANAGEMENT
-// ============================================
-let currentSession = null;
-let currentMode = 'login'; // 'login' or 'register'
-
-// ============================================
-// UI RENDERING
-// ============================================
-function render() {
-  const container = document.getElementById('mainContent');
-  if (!currentSession) {
-    renderAuthScreen(container);
-  } else {
-    renderDashboard(container);
-  }
-}
-
-function renderAuthScreen(container) {
-  container.innerHTML = `
-    <div class="toggle-group">
-      <button class="toggle-btn ${currentMode === 'login' ? 'active' : ''}" id="loginTab">🔐 LOGIN</button>
-      <button class="toggle-btn ${currentMode === 'register' ? 'active' : ''}" id="registerTab">📝 REGISTER</button>
-    </div>
-    <div class="card">
-      <div class="input-group">
-        <label>📧 EMAIL ADDRESS</label>
-        <input type="email" id="authEmail" placeholder="miner@example.com" autocomplete="email">
-      </div>
-      <div class="input-group">
-        <label>🔒 PASSWORD</label>
-        <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
-      </div>
-      <button id="submitBtn">${currentMode === 'login' ? '⚡ LOGIN' : '✨ CREATE ACCOUNT'}</button>
-      <div id="authMsg" class="message"></div>
-    </div>
-  `;
-  
-  // Event listeners
-  document.getElementById('loginTab')?.addEventListener('click', () => {
-    currentMode = 'login';
-    renderAuthScreen(container);
-  });
-  
-  document.getElementById('registerTab')?.addEventListener('click', () => {
-    currentMode = 'register';
-    renderAuthScreen(container);
-  });
-  
-  document.getElementById('submitBtn').onclick = async () => {
-    const email = document.getElementById('authEmail').value;
-    const password = document.getElementById('authPassword').value;
-    const msgDiv = document.getElementById('authMsg');
-    
-    msgDiv.innerHTML = '<span class="info-msg">⏳ Processing...</span>';
-    
-    let result;
-    if (currentMode === 'login') {
-      result = await loginUser(email, password);
-      if (result.success) {
-        currentSession = result.user;
-        render();
-      }
-    } else {
-      result = await registerUser(email, password);
-      if (result.success) {
-        currentMode = 'login';
-        renderAuthScreen(container);
-      }
-    }
-    
-    if (result && !result.success) {
-      msgDiv.innerHTML = `<span class="error-msg">❌ ${result.msg}</span>`;
-    }
-  };
-}
-
-async function renderDashboard(container) {
-  // Refresh session data
-  const freshUser = await getUser(currentSession.email);
-  if (freshUser) currentSession = freshUser;
-  
-  const isAdmin = currentSession.role === 'admin';
-  const lastMineTime = currentSession.lastMine ? new Date(currentSession.lastMine).getTime() : 0;
-  const now = Date.now();
-  const canMine = !lastMineTime || (now - lastMineTime) >= (COOLDOWN_HOURS * 3600000);
-  const hoursLeft = !canMine ? ((COOLDOWN_HOURS * 3600000 - (now - lastMineTime)) / 3600000).toFixed(1) : 0;
-  
-  container.innerHTML = `
-    <div class="card">
-      <div class="stat-row">
-        <span class="stat-label">💎 WALLET</span>
-        <span class="stat-value">${currentSession.email}</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">🆔 MINER ID</span>
-        <span class="stat-value" style="font-size:0.75rem;">${currentSession.uid}</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">💰 BALANCE</span>
-        <span class="stat-value glowing" id="balanceDisplay">${currentSession.balance.toFixed(4)} NXM</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">⭐ ROLE</span>
-        <span class="stat-value"><span class="status-badge ${isAdmin ? 'badge-admin' : 'badge-user'}">${isAdmin ? 'ADMIN' : 'MINER'}</span></span>
-      </div>
-    </div>
-    
-    <div class="card">
-      <div class="mining-animation" id="miningAnim">⛏️ 💎 ⛏️</div>
-      <button class="mine-btn" id="mineBtn" ${!canMine ? 'disabled' : ''}>
-        ${canMine ? '⚡ START MINING' : `⏰ COOLDOWN (${hoursLeft}h)`}
-      </button>
-      <div id="mineMsg" class="message"></div>
-    </div>
-    
-    ${isAdmin ? `
-    <div class="card">
-      <div style="font-weight:bold; margin-bottom:12px; color:#88ccff;">📢 ADMIN BROADCAST</div>
-      <div class="input-group">
-        <textarea id="broadcastMsg" rows="2" placeholder="Enter announcement for all miners..."></textarea>
-      </div>
-      <button id="broadcastBtn">📡 SEND BROADCAST</button>
-      <div id="broadcastMsgDiv" class="message"></div>
-    </div>
-    ` : ''}
-    
-    <button id="logoutBtn" style="background:#1f1f2e; border-color:#ff5e7e;">🚪 DISCONNECT WALLET</button>
-  `;
-  
-  // Mining button handler
-  document.getElementById('mineBtn')?.addEventListener('click', async () => {
-    const animDiv = document.getElementById('miningAnim');
-    const mineBtn = document.getElementById('mineBtn');
-    const msgDiv = document.getElementById('mineMsg');
-    
-    animDiv.innerHTML = '🌀 MINING IN PROGRESS 🌀';
-    mineBtn.disabled = true;
-    msgDiv.innerHTML = '<span class="info-msg">⏳ Verifying blockchain...</span>';
-    
-    const result = await performMining(currentSession);
-    
+    const result = await saveUserToBackend(newUser);
     if (result.success) {
-      currentSession = result.updatedSession;
-      animDiv.innerHTML = '✅ +' + MINING_REWARD + ' NXM! ✅';
-      document.getElementById('balanceDisplay').innerHTML = result.newBalance.toFixed(4) + ' NXM';
-      msgDiv.innerHTML = `<span class="success-msg">${result.msg}</span>`;
-      setTimeout(() => render(), 2000);
-    } else {
-      animDiv.innerHTML = '⛏️ 💎 ⛏️';
-      msgDiv.innerHTML = `<span class="error-msg">❌ ${result.msg}</span>`;
-      mineBtn.disabled = false;
-      if (result.msg.includes('cooldown')) {
-        setTimeout(() => render(), 2000);
-      }
+      await addLogEntry("REGISTER", result.uid, email, "New registration");
+      return { ok: true, msg: "Registration successful! Please login." };
     }
-  });
-  
-  // Admin broadcast handler
-  if (isAdmin) {
-    document.getElementById('broadcastBtn')?.addEventListener('click', async () => {
-      const msg = document.getElementById('broadcastMsg').value.trim();
-      const msgDiv = document.getElementById('broadcastMsgDiv');
-      
-      if (!msg) {
-        msgDiv.innerHTML = '<span class="error-msg">❌ Enter a message</span>';
-        return;
-      }
-      
-      await addLog('BROADCAST', currentSession.uid, currentSession.email, `Admin broadcast: ${msg}`);
-      msgDiv.innerHTML = '<span class="success-msg">✅ Broadcast sent to all miners!</span>';
-      document.getElementById('broadcastMsg').value = '';
-      setTimeout(() => msgDiv.innerHTML = '', 3000);
-    });
+    return { ok: false, msg: "Registration failed. Try again." };
   }
-  
-  // Logout handler
-  document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    currentSession = null;
-    render();
-  });
-}
 
-// ============================================
-// INITIALIZATION
-// ============================================
-async function init() {
-  const container = document.getElementById('mainContent');
-  const isConnected = await testBackend();
-  
-  if (!isConnected) {
+  // --- Login logic ---
+  async function loginUser(email, password) {
+    email = email.trim().toLowerCase();
+    password = password.trim();
+    const hashedPass = simpleHash(password);
+
+    const user = await loadUserFromBackend(email);
+    if (!user) return { ok: false, msg: "User not found" };
+    if (user.password === hashedPass) {
+      await addLogEntry("LOGIN", user.uid, email, "User logged in");
+      return { ok: true, user: user };
+    }
+    return { ok: false, msg: "Invalid password" };
+  }
+
+  // --- Mining logic (cooldown + reward) ---
+  const REWARD = 0.2;
+  const COOLDOWN_HOURS = 24;
+
+  async function performMining(user) {
+    const now = Date.now();
+    const lastMineTime = user.lastMine ? new Date(user.lastMine).getTime() : 0;
+    const hoursSince = (now - lastMineTime) / (1000 * 60 * 60);
+
+    if (lastMineTime > 0 && hoursSince < COOLDOWN_HOURS) {
+      const remaining = (COOLDOWN_HOURS - hoursSince).toFixed(1);
+      return { ok: false, msg: `⏰ Cooldown active: ${remaining} hours left` };
+    }
+
+    const newBalance = user.balance + REWARD;
+    const updatedUser = {
+      email: user.email,
+      password: user.password,
+      balance: newBalance,
+      role: user.role,
+      lastMine: new Date().toISOString(),
+      createdAt: user.createdAt
+    };
+
+    const saveRes = await saveUserToBackend(updatedUser);
+    if (saveRes.success) {
+      await addLogEntry("MINE", user.uid, user.email, `Mined ${REWARD} NXM`);
+      return { ok: true, newBalance: newBalance, reward: REWARD };
+    }
+    return { ok: false, msg: "Mining failed, please retry" };
+  }
+
+  // --- Admin broadcast (just logs, fully frontend) ---
+  async function adminBroadcast(user, message) {
+    if (user.role !== "admin") return { ok: false, msg: "Admin only" };
+    await addLogEntry("BROADCAST", user.uid, user.email, `📢 ${message}`);
+    return { ok: true, msg: "Broadcast sent to network" };
+  }
+
+  // ============================================================
+  // UI RENDERING (no backend changes ever)
+  // ============================================================
+  function render() {
+    const panel = document.getElementById("dynamicPanel");
+    if (!currentUser) {
+      renderAuthScreen(panel);
+    } else {
+      renderDashboard(panel);
+    }
+  }
+
+  function renderAuthScreen(container) {
     container.innerHTML = `
       <div class="card">
-        <div class="message error-msg">
-          ⚠️ Cannot connect to mining network.<br><br>
-          <strong>Possible fixes:</strong><br>
-          1. Check if Apps Script is deployed<br>
-          2. Ensure access is set to "Anyone"<br>
-          3. Wait 2 minutes after deployment<br><br>
-          <span style="font-size:0.7rem;">URL: ${API_URL.substring(0, 60)}...</span>
+        <div class="toggle-group">
+          <button class="toggle-btn ${activeAuthMode === 'login' ? 'active' : ''}" id="loginTabBtn">🔐 LOGIN</button>
+          <button class="toggle-btn ${activeAuthMode === 'register' ? 'active' : ''}" id="registerTabBtn">📝 REGISTER</button>
         </div>
+        <div class="input-group">
+          <label>📧 EMAIL</label>
+          <input type="email" id="authEmail" placeholder="miner@example.com" autocomplete="email">
+        </div>
+        <div class="input-group">
+          <label>🔒 PASSWORD</label>
+          <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button id="submitAuthBtn">${activeAuthMode === 'login' ? '⚡ LOGIN' : '✨ CREATE ACCOUNT'}</button>
+        <div id="authMessage" class="message"></div>
       </div>
     `;
-  } else {
+
+    document.getElementById("loginTabBtn")?.addEventListener("click", () => {
+      activeAuthMode = "login";
+      render();
+    });
+    document.getElementById("registerTabBtn")?.addEventListener("click", () => {
+      activeAuthMode = "register";
+      render();
+    });
+
+    const submitBtn = document.getElementById("submitAuthBtn");
+    const emailInp = document.getElementById("authEmail");
+    const pwdInp = document.getElementById("authPassword");
+    const msgDiv = document.getElementById("authMessage");
+
+    submitBtn.onclick = async () => {
+      const email = emailInp.value;
+      const password = pwdInp.value;
+      msgDiv.innerHTML = '<span class="info-msg">⏳ Processing...</span>';
+
+      if (activeAuthMode === "login") {
+        const result = await loginUser(email, password);
+        if (result.ok) {
+          currentUser = result.user;
+          render();
+        } else {
+          msgDiv.innerHTML = `<span class="error-msg">❌ ${result.msg}</span>`;
+        }
+      } else {
+        const result = await registerUser(email, password);
+        if (result.ok) {
+          msgDiv.innerHTML = `<span class="success-msg">✅ ${result.msg}</span>`;
+          emailInp.value = "";
+          pwdInp.value = "";
+          activeAuthMode = "login";
+          render();
+        } else {
+          msgDiv.innerHTML = `<span class="error-msg">❌ ${result.msg}</span>`;
+        }
+      }
+    };
+  }
+
+  async function renderDashboard(container) {
+    // refresh latest data from backend
+    const fresh = await loadUserFromBackend(currentUser.email);
+    if (fresh) currentUser = fresh;
+
+    const isAdmin = currentUser.role === "admin";
+    const lastMineTime = currentUser.lastMine ? new Date(currentUser.lastMine).getTime() : 0;
+    const now = Date.now();
+    const canMine = !lastMineTime || (now - lastMineTime) >= (COOLDOWN_HOURS * 3600000);
+    const hoursLeft = !canMine ? ((COOLDOWN_HOURS * 3600000 - (now - lastMineTime)) / 3600000).toFixed(1) : 0;
+
+    container.innerHTML = `
+      <div class="card">
+        <div class="stat-row">
+          <span class="stat-label">💎 WALLET</span>
+          <span class="stat-value">${escapeHtml(currentUser.email)}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">🆔 MINER ID</span>
+          <span class="stat-value" style="font-size:0.7rem;">${currentUser.uid}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">💰 BALANCE</span>
+          <span class="stat-value glow-text" id="balanceValue">${currentUser.balance.toFixed(4)} NXM</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">⭐ ROLE</span>
+          <span class="stat-value"><span class="badge ${isAdmin ? 'badge-admin' : 'badge-user'}">${isAdmin ? 'ADMIN' : 'MINER'}</span></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="mining-animation" id="miningAnim">⛏️ 💎 ⛏️</div>
+        <button class="mine-btn" id="mineActionBtn" ${!canMine ? 'disabled' : ''}>
+          ${canMine ? '⚡ START MINING (+0.2 NXM)' : `⏰ COOLDOWN (${hoursLeft}h)`}
+        </button>
+        <div id="mineFeedback" class="message"></div>
+      </div>
+
+      ${isAdmin ? `
+      <div class="card">
+        <div style="font-weight:bold; margin-bottom:14px;">📢 ADMIN BROADCAST</div>
+        <div class="input-group">
+          <textarea id="broadcastMessage" rows="2" placeholder="Announcement to all miners..."></textarea>
+        </div>
+        <button id="sendBroadcastBtn">📡 SEND TO NETWORK</button>
+        <div id="broadcastStatus" class="message"></div>
+      </div>
+      ` : ''}
+
+      <button id="logoutButton">🚪 DISCONNECT WALLET</button>
+    `;
+
+    // Mining action
+    const mineBtn = document.getElementById("mineActionBtn");
+    const animDiv = document.getElementById("miningAnim");
+    const mineMsgDiv = document.getElementById("mineFeedback");
+
+    mineBtn?.addEventListener("click", async () => {
+      if (!currentUser) return;
+      mineBtn.disabled = true;
+      animDiv.innerHTML = "🌀 MINING IN PROGRESS 🌀";
+      mineMsgDiv.innerHTML = '<span class="info-msg">⛏️ Hashing proof-of-work...</span>';
+
+      const result = await performMining(currentUser);
+      if (result.ok) {
+        currentUser.balance = result.newBalance;
+        document.getElementById("balanceValue").innerHTML = result.newBalance.toFixed(4) + " NXM";
+        animDiv.innerHTML = `✅ +${result.reward} NXM MINED! ✅`;
+        mineMsgDiv.innerHTML = `<span class="success-msg">✅ Mining successful! +${result.reward} NXM</span>`;
+        setTimeout(() => render(), 1800);
+      } else {
+        animDiv.innerHTML = "⛏️ 💎 ⛏️";
+        mineMsgDiv.innerHTML = `<span class="error-msg">❌ ${result.msg}</span>`;
+        mineBtn.disabled = false;
+        if (result.msg.includes("Cooldown")) {
+          setTimeout(() => render(), 2000);
+        }
+      }
+    });
+
+    // Admin broadcast
+    if (isAdmin) {
+      const broadcastBtn = document.getElementById("sendBroadcastBtn");
+      const broadcastInput = document.getElementById("broadcastMessage");
+      const broadcastStatusDiv = document.getElementById("broadcastStatus");
+      broadcastBtn?.addEventListener("click", async () => {
+        const msg = broadcastInput.value.trim();
+        if (!msg) {
+          broadcastStatusDiv.innerHTML = '<span class="error-msg">❌ Enter a message</span>';
+          return;
+        }
+        const res = await adminBroadcast(currentUser, msg);
+        if (res.ok) {
+          broadcastStatusDiv.innerHTML = `<span class="success-msg">✅ ${res.msg}</span>`;
+          broadcastInput.value = "";
+          setTimeout(() => (broadcastStatusDiv.innerHTML = ""), 3000);
+        } else {
+          broadcastStatusDiv.innerHTML = `<span class="error-msg">❌ ${res.msg}</span>`;
+        }
+      });
+    }
+
+    // Logout
+    document.getElementById("logoutButton")?.addEventListener("click", () => {
+      currentUser = null;
+      render();
+    });
+  }
+
+  // simple escape helper
+  function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === "&") return "&amp;";
+      if (m === "<") return "&lt;";
+      if (m === ">") return "&gt;";
+      return m;
+    });
+  }
+
+  // ============================================================
+  // CONNECTION TEST & START
+  // ============================================================
+  async function initApp() {
+    const panel = document.getElementById("dynamicPanel");
+    const testResponse = await callApi({ action: "PING" });
+    if (!testResponse || !testResponse.success) {
+      panel.innerHTML = `
+        <div class="card">
+          <div class="message error-msg">
+            ⚠️ Cannot reach mining network.<br><br>
+            <strong>Possible fixes:</strong><br>
+            • Redeploy Apps Script with "Anyone" access<br>
+            • Wait 2 min after deployment<br>
+            • Check if URL is correct<br><br>
+            <span style="font-size:0.7rem;">URL: ${API_BASE_URL.substring(0, 70)}...</span>
+          </div>
+        </div>
+      `;
+      return;
+    }
     render();
   }
-}
 
-// Start the app
-init();
-
-// Auto-refresh dashboard every 30 seconds
-setInterval(() => {
-  if (currentSession) {
-    render();
-  }
-}, 30000);
+  initApp();
 </script>
 </body>
 </html>
