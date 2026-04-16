@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RidaChain Web3 Hub</title>
+    <title>RidaChain Web3 Explorer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        :root { --sky: #38bdf8; --indigo: #6366f1; --admin: #ef4444; }
+        :root { --sky: #38bdf8; --indigo: #6366f1; }
         body { background: #020617; color: #fff; font-family: 'Outfit', sans-serif; overflow: hidden; height: 100vh; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .btn-prime { background: linear-gradient(135deg, var(--sky) 0%, var(--indigo) 100%); transition: 0.3s; }
-        .btn-prime:active { transform: scale(0.95); }
         .tab-btn.active { color: var(--sky); border-bottom: 2px solid var(--sky); }
-        .ledger-row { animation: slideIn 0.4s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .ledger-row { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -23,130 +22,111 @@
 
     <header class="p-6 glass flex justify-between items-center">
         <div>
-            <h1 class="text-xl font-black italic tracking-tighter uppercase">RidaChain <span class="text-sky-400">Web3</span></h1>
-            <p id="role-tag" class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Global Ledger Protocol</p>
+            <h1 class="text-xl font-black italic tracking-tighter uppercase">RidaChain <span class="text-sky-400 text-sm">v3.0</span></h1>
+            <p id="role-tag" class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Web3 Ecosystem</p>
         </div>
-        <div id="kyc-status" class="px-3 py-1 rounded-full text-[8px] font-black border border-white/10 uppercase">Syncing...</div>
+        <div id="kyc-badge" class="px-3 py-1 rounded-full text-[8px] font-black border border-white/10 uppercase">Syncing...</div>
     </header>
 
     <nav class="flex justify-around glass py-3">
         <button onclick="showTab('ledger')" id="btn-ledger" class="tab-btn active text-[9px] font-black uppercase px-4 pb-1">Ledger</button>
         <button onclick="showTab('chat')" id="btn-chat" class="tab-btn text-[9px] font-black uppercase px-4 pb-1">Support</button>
         <button onclick="showTab('kyc')" id="btn-kyc" class="tab-btn text-[9px] font-black uppercase px-4 pb-1">Verify</button>
-        <button onclick="showTab('mgt')" id="btn-mgt" class="tab-btn text-[9px] font-black uppercase px-4 pb-1 hidden text-red-500">Manage</button>
+        <button onclick="showTab('mgt')" id="btn-mgt" class="tab-btn text-[9px] font-black uppercase px-4 pb-1 hidden text-red-500">Admin</button>
     </nav>
 
     <main class="flex-1 overflow-y-auto p-4 pb-24">
         
         <div id="tab-ledger" class="space-y-2">
             <div class="flex justify-between items-center px-2 mb-4">
-                <p class="text-[9px] font-black text-sky-500 uppercase">Live Network Flow</p>
+                <p class="text-[9px] font-black text-sky-500 uppercase">Live Network Ledger</p>
                 <p class="text-[8px] opacity-30 italic">~130 TX/HR</p>
             </div>
             <div id="ledger-box" class="space-y-2"></div>
         </div>
 
         <div id="tab-chat" class="hidden h-full flex flex-col">
-            <div id="admin-inbox" class="hidden mb-4">
-                <p class="text-[8px] font-black text-red-500 uppercase px-2 mb-2">Active Tickets</p>
+            <div id="admin-inbox" class="hidden mb-4 p-2 bg-white/5 rounded-2xl">
+                <p class="text-[7px] font-black text-red-500 uppercase mb-2">Select User Ticket</p>
                 <div id="inbox-list" class="flex gap-2 overflow-x-auto pb-2"></div>
             </div>
             <div id="chat-win" class="glass rounded-[2rem] p-4 h-[50vh] overflow-y-auto space-y-4 mb-4">
-                <p class="text-center text-[9px] opacity-20 mt-20 uppercase font-black">Connection Encrypted</p>
+                <p class="text-center text-[9px] opacity-20 mt-20 uppercase font-black">Messages are Encrypted</p>
             </div>
             <div class="flex gap-2">
-                <input type="text" id="chat-msg" placeholder="Write message..." class="flex-1 bg-white/5 border border-white/10 p-4 rounded-2xl text-xs outline-none">
+                <input type="text" id="chat-msg" placeholder="Type message..." class="flex-1 bg-white/5 border border-white/10 p-4 rounded-2xl text-xs outline-none focus:border-sky-500">
                 <button onclick="sendChat()" class="btn-prime px-6 rounded-2xl"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
 
         <div id="tab-kyc" class="hidden space-y-4">
             <div class="glass p-6 rounded-[2.5rem] border-sky-500/20 text-center">
-                <i class="fas fa-gem text-3xl text-sky-400 mb-4"></i>
-                <h3 class="text-sm font-black uppercase">Web3 Identity Verification</h3>
-                <p class="text-[10px] text-slate-400 mt-2">Send 5 USDT (BSC BEP20) to enable P2P transfers.</p>
-                <p class="text-[9px] font-mono mt-4 text-sky-400 break-all bg-black/40 p-4 rounded-2xl border border-white/5">0xCeC73F7C0e6709eD740Bc8f486fa6623bC0873b3</p>
-                <button onclick="copyWallet()" class="mt-2 text-[8px] font-black uppercase text-slate-500">Copy Wallet Address</button>
-                <input type="text" id="kyc-tx" placeholder="Transaction Hash (TxID)" class="w-full mt-6 bg-white/5 border border-white/10 p-4 rounded-xl text-xs outline-none focus:border-sky-500">
-                <button onclick="submitKYC()" class="w-full mt-2 btn-prime py-4 rounded-xl text-[10px] font-black uppercase tracking-widest">Submit Proof</button>
+                <i class="fas fa-shield-check text-3xl text-sky-400 mb-4"></i>
+                <h3 class="text-sm font-black uppercase">KYC Portal</h3>
+                <p class="text-[10px] text-slate-400 mt-2">Send 5 USDT (BSC BEP20) to the address below.</p>
+                <p id="wallet-addr" class="text-[9px] font-mono mt-4 text-sky-400 break-all bg-black/40 p-4 rounded-2xl border border-white/5">0xCeC73F7C0e6709eD740Bc8f486fa6623bC0873b3</p>
+                <button onclick="copyWallet()" class="mt-2 text-[8px] font-black uppercase text-slate-500 hover:text-white">Copy Wallet Address</button>
+                <input type="text" id="kyc-hash" placeholder="Enter Transaction Hash (TxID)" class="w-full mt-6 bg-white/5 border border-white/10 p-4 rounded-xl text-xs outline-none focus:border-sky-500">
+                <button onclick="submitKYC()" class="w-full mt-2 btn-prime py-4 rounded-xl text-[10px] font-black uppercase">Submit Proof</button>
             </div>
         </div>
 
-        <div id="tab-mgt" class="hidden space-y-6">
-            <div>
-                <h2 class="text-[10px] font-black text-red-500 uppercase mb-3 px-2">Pending KYC</h2>
-                <div id="admin-kyc-list" class="space-y-2"></div>
-            </div>
+        <div id="tab-mgt" class="hidden space-y-4">
+            <h2 class="text-[10px] font-black text-red-500 uppercase px-2">Pending KYC Approvals</h2>
+            <div id="admin-kyc-list" class="space-y-2"></div>
         </div>
 
     </main>
 
     <script>
-        const API = "https://script.google.com/macros/s/AKfycbxOz2jz4jj5Ah6w3o_v8wq6BuQmnmideu-Dh4YorQFdVzqspbRRnANi4mOiGag52Sla/exec";
+        const API = "https://script.google.com/macros/s/AKfycbzpUT4ZDjctoJTl_oTcq7qvixYsYMMdL-Lbq9KkUa-9iHSds1zv08_ME2-7uqUDuiZP/exec";
         const urlParams = new URLSearchParams(window.location.search);
         const user = {
             uid: urlParams.get('uid') || "GUEST-00",
             username: urlParams.get('username') || "Anonymous"
         };
 
-        const isAdmin = (user.username === "adminRida" || user.uid === "RIDA-259259");
+        const isAdmin = (user.username === "adminRida");
         let activeChatUser = "ADMIN";
 
         window.onload = () => {
             if(isAdmin) {
                 document.getElementById('btn-mgt').classList.remove('hidden');
-                document.getElementById('role-tag').innerText = "Administrator Console";
-                document.getElementById('role-tag').classList.add('text-red-500');
+                document.getElementById('role-tag').innerText = "Network Admin";
+                document.getElementById('role-tag').className = "text-[8px] font-black text-red-500 uppercase tracking-widest";
             }
             init();
         };
 
         function init() {
-            setInterval(genTX, 2000); // 130+ TX per hour
-            loadStatus();
-            if(isAdmin) setInterval(loadAdminData, 10000);
-        }
-
-        // --- ADMIN MANAGEMENT ---
-        async function loadAdminData() {
-            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'adminGetAll', username: user.username }) })).json();
-            if(res.success) {
-                document.getElementById('admin-kyc-list').innerHTML = res.data.kyc.filter(k => k[4] === 'Pending').map(k => `
-                    <div class="glass p-4 rounded-2xl flex justify-between items-center">
-                        <div class="text-[10px]"><p class="font-black">${k[2]}</p><p class="opacity-30 font-mono">${k[3].substring(0,12)}...</p></div>
-                        <button onclick="approveKYC('${k[1]}')" class="bg-green-500/20 text-green-500 px-4 py-2 rounded-xl text-[8px] font-black uppercase">Approve</button>
-                    </div>
-                `).join('') || '<p class="text-center py-4 opacity-20 text-[10px]">No pending KYC</p>';
-            }
-        }
-
-        async function approveKYC(targetUid) {
-            await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'adminApproveKYC', username: user.username, targetUid }) });
-            loadAdminData();
+            setInterval(genLedger, 2500); 
+            checkKYC();
+            if(isAdmin) loadAdminMgt();
         }
 
         // --- CHAT LOGIC ---
         async function loadChat() {
-            if(isAdmin) document.getElementById('admin-inbox').classList.remove('hidden');
-            
             const payload = { 
                 action: 'getMessages', 
                 uid: user.uid, 
                 username: user.username,
-                targetUser: isAdmin ? activeChatUser : null 
+                targetUser: isAdmin ? activeChatUser : "ADMIN"
             };
 
             const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
             if (res.success) {
-                if(isAdmin && activeChatUser === "ADMIN") {
-                    const uniqueUsers = [...new Set(res.data.map(m => m[1]))].filter(u => u !== user.uid);
-                    document.getElementById('inbox-list').innerHTML = uniqueUsers.map(u => `
-                        <button onclick="setChatUser('${u}')" class="shrink-0 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[9px] font-black">${u}</button>
+                if(isAdmin) {
+                    document.getElementById('admin-inbox').classList.remove('hidden');
+                    const users = [...new Set(res.data.map(m => m[1]))].filter(u => u !== user.uid);
+                    document.getElementById('inbox-list').innerHTML = users.map(u => `
+                        <button onclick="setChatUser('${u}')" class="shrink-0 px-4 py-2 rounded-xl bg-white/10 border ${activeChatUser === u ? 'border-sky-500 text-sky-400' : 'border-white/10'} text-[9px] font-black">${u}</button>
                     `).join('');
                 }
 
                 const win = document.getElementById('chat-win');
+                // Filter messages based on active conversation
                 const messages = isAdmin ? res.data.filter(m => m[1] === activeChatUser || m[4] === activeChatUser) : res.data;
+                
                 win.innerHTML = messages.map(m => `
                     <div class="flex ${m[1] === user.uid ? 'justify-end' : 'justify-start'}">
                         <div class="max-w-[85%] px-4 py-2 rounded-2xl ${m[1] === user.uid ? 'btn-prime' : 'bg-white/10'}">
@@ -159,48 +139,69 @@
             }
         }
 
+        async function sendChat() {
+            const input = document.getElementById('chat-msg');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            const payload = {
+                action: 'sendMessage',
+                uid: user.uid,
+                username: user.username,
+                message: msg,
+                target: isAdmin ? activeChatUser : "ADMIN"
+            };
+
+            input.value = "Sending...";
+            await fetch(API, { method: 'POST', body: JSON.stringify(payload) });
+            input.value = "";
+            loadChat();
+        }
+
         function setChatUser(uid) {
             activeChatUser = uid;
             loadChat();
         }
 
-        async function sendChat() {
-            const msg = document.getElementById('chat-msg').value;
-            if(!msg) return;
-            await fetch(API, { method: 'POST', body: JSON.stringify({
-                action: 'sendMessage', uid: user.uid, username: user.username, message: msg, target: isAdmin ? activeChatUser : "ADMIN"
-            }) });
-            document.getElementById('chat-msg').value = '';
-            loadChat();
-        }
-
-        // --- CORE LOGIC ---
-        async function loadStatus() {
+        // --- KYC & ADMIN LOGIC ---
+        async function checkKYC() {
             const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'getKYCStatus', uid: user.uid }) })).json();
-            const badge = document.getElementById('kyc-status');
+            const badge = document.getElementById('kyc-badge');
             badge.innerText = res.data;
             badge.className = `px-3 py-1 rounded-full text-[8px] font-black border uppercase ${res.data === 'Verified' ? 'text-green-500 border-green-500/30' : 'text-amber-500 border-amber-500/30'}`;
         }
 
         async function submitKYC() {
-            const hash = document.getElementById('kyc-tx').value;
-            if(!hash) return;
-            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ 
-                action: 'submitKYC', uid: user.uid, username: user.username, txHash: hash 
-            }) })).json();
+            const hash = document.getElementById('kyc-hash').value;
+            if(!hash) return alert("Enter TxID");
+            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'submitKYC', uid: user.uid, username: user.username, txHash: hash }) })).json();
             alert(res.msg);
-            loadStatus();
+            checkKYC();
         }
 
-        function genTX() {
+        async function loadAdminMgt() {
+            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'adminGetAll', username: user.username }) })).json();
+            if(res.success) {
+                document.getElementById('admin-kyc-list').innerHTML = res.data.kyc.filter(k => k[4] === 'Pending').map(k => `
+                    <div class="glass p-4 rounded-2xl flex justify-between items-center">
+                        <div class="text-[10px] font-black"><p>${k[2]}</p><p class="opacity-30 text-[8px]">${k[3].substring(0,15)}...</p></div>
+                        <button onclick="approveKYC('${k[1]}')" class="bg-green-500 text-white px-3 py-1 rounded-lg text-[8px] font-black uppercase">Approve</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function approveKYC(tUid) {
+            await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'adminApproveKYC', username: user.username, targetUid: tUid }) });
+            loadAdminMgt();
+        }
+
+        // --- UTILS ---
+        function genLedger() {
             const box = document.getElementById('ledger-box');
-            const sender = "RIDA-" + Math.floor(1000+Math.random()*9000);
-            const receiver = "RIDA-" + Math.floor(1000+Math.random()*9000);
-            const hash = "0x" + Math.random().toString(36).substring(2, 12);
             const row = `<div class="glass p-4 rounded-2xl ledger-row flex justify-between items-center">
-                <div><p class="text-[9px] font-black"><span class="text-sky-400">${sender}</span> <i class="fas fa-arrow-right mx-1 opacity-20"></i> ${receiver}</p>
-                <p class="text-[7px] font-mono opacity-20">${hash}</p></div>
-                <div class="text-right"><p class="text-[10px] font-black text-green-400">+${(Math.random()*490+10).toFixed(2)} RIDA</p></div>
+                <div class="text-[9px] font-black"><span class="text-sky-400">RIDA-${Math.floor(1000+Math.random()*9000)}</span> <i class="fas fa-arrow-right mx-1 opacity-20"></i> RIDA-${Math.floor(1000+Math.random()*9000)}</div>
+                <div class="text-[10px] font-black text-green-400">+${(Math.random()*490+10).toFixed(2)} RIDA</div>
             </div>`;
             box.insertAdjacentHTML('afterbegin', row);
             if(box.children.length > 8) box.removeChild(box.lastChild);
@@ -218,9 +219,8 @@
 
         function copyWallet() {
             navigator.clipboard.writeText("0xCeC73F7C0e6709eD740Bc8f486fa6623bC0873b3");
-            alert("Admin Wallet Copied");
+            alert("Wallet Address Copied");
         }
     </script>
 </body>
 </html>
-
