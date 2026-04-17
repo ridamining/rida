@@ -2,120 +2,232 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIDA Explorer & Support</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RidaChain Core Node</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: transparent; color: #fff; font-family: 'Outfit', sans-serif; padding: 15px; }
-        .stat-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; padding: 15px; }
-        .tab-btn { padding: 10px 20px; font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #475569; }
-        .tab-active { color: #38bdf8; border-bottom: 2px solid #38bdf8; }
-        .hidden { display: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        body { background: #010409; color: #fff; font-family: 'Outfit', sans-serif; overflow: hidden; height: 100vh; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .btn-prime { background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%); transition: 0.3s; }
+        .tab-btn.active { color: #38bdf8; border-bottom: 2px solid #38bdf8; }
+        .tx-card { animation: slideUp 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .shimmer { background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.05), transparent); background-size: 200% 100%; animation: shimmer 3s infinite; }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
-    <div class="flex justify-around border-b border-white/10 mb-6">
-        <button onclick="tab('stats')" id="t-stats" class="tab-btn tab-active">STATS</button>
-        <button onclick="tab('leader')" id="t-leader" class="tab-btn">TOP NODES</button>
-        <button onclick="tab('support')" id="t-support" class="tab-btn">SUPPORT</button>
-    </div>
+<body class="max-w-md mx-auto flex flex-col border-x border-white/5">
 
-    <div id="v-stats" class="space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-            <div class="stat-card">
-                <p class="text-[8px] text-slate-500 font-bold uppercase">Total Rida Mined</p>
-                <h3 id="n-total" class="text-lg font-black text-sky-400 tracking-tighter">0.00</h3>
+    <header class="p-6 glass flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-black italic tracking-tighter">RIDACHAIN <span class="text-sky-400 text-sm">PRO</span></h1>
+            <p id="role-tag" class="text-[7px] font-bold text-slate-500 uppercase tracking-[0.2em]">Validated Node v4.0</p>
+        </div>
+        <div id="kyc-badge" class="px-3 py-1 rounded-full text-[8px] font-black border border-white/10 uppercase tracking-widest text-amber-500">Syncing</div>
+    </header>
+
+    <nav class="flex justify-around glass py-3">
+        <button onclick="showTab('ledger')" id="btn-ledger" class="tab-btn active text-[9px] font-black uppercase px-4 pb-1">Ledger</button>
+        <button onclick="showTab('chat')" id="btn-chat" class="tab-btn text-[9px] font-black uppercase px-4 pb-1">Support</button>
+        <button onclick="showTab('kyc')" id="btn-kyc" class="tab-btn text-[9px] font-black uppercase px-4 pb-1">Verify</button>
+        <button onclick="showTab('mgt')" id="btn-mgt" class="tab-btn text-[9px] font-black uppercase px-4 hidden text-red-500">Admin</button>
+    </nav>
+
+    <main class="flex-1 overflow-y-auto p-4 pb-24">
+        
+        <div id="tab-ledger" class="space-y-3">
+            <div class="glass p-3 rounded-2xl flex items-center gap-3 shimmer">
+                <div class="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                <p class="text-[8px] font-black uppercase tracking-widest text-sky-400">Live Network Stream: Block #<span id="block-num">91204</span></p>
             </div>
-            <div class="stat-card">
-                <p class="text-[8px] text-slate-500 font-bold uppercase">Active Nodes</p>
-                <h3 id="n-users" class="text-lg font-black text-white tracking-tighter">0</h3>
+            <div id="ledger-box" class="space-y-2"></div>
+        </div>
+
+        <div id="tab-chat" class="hidden h-full flex flex-col">
+            <div id="admin-selector" class="hidden mb-3 p-2 bg-white/5 rounded-2xl">
+                <p class="text-[7px] font-black text-red-500 uppercase px-1 mb-2">Select Active Ticket</p>
+                <div id="inbox-list" class="flex gap-2 overflow-x-auto pb-1"></div>
+            </div>
+            <div id="chat-win" class="glass rounded-[2.5rem] p-5 h-[50vh] overflow-y-auto space-y-4 mb-4">
+                <p class="text-center text-[9px] opacity-20 mt-20 uppercase font-black">Secure Link Established</p>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="chat-msg" placeholder="Message..." class="flex-1 bg-white/5 border border-white/10 p-4 rounded-2xl text-xs outline-none focus:border-sky-500">
+                <button onclick="sendChat()" class="btn-prime px-6 rounded-2xl"><i class="fas fa-paper-plane text-xs"></i></button>
             </div>
         </div>
-        <div class="stat-card border-dashed">
-            <p class="text-[8px] text-sky-500 font-bold uppercase">Recent Network Activity</p>
-            <div id="live-ledger" class="mt-2 text-[9px] font-mono text-slate-500 space-y-1">
+
+        <div id="tab-kyc" class="hidden space-y-4">
+            <div class="glass p-8 rounded-[3rem] text-center space-y-4 border-t border-sky-500/20">
+                <i class="fas fa-fingerprint text-3xl text-sky-400"></i>
+                <h3 class="text-sm font-black uppercase tracking-widest">Verify Ownership</h3>
+                <p class="text-[10px] text-slate-500">Submit a 5 USDT (BSC) transaction to enable P2P features.</p>
+                <div class="bg-black/40 p-4 rounded-2xl border border-white/5 font-mono text-[9px] text-sky-400 break-all select-all">
+                    0xCeC73F7C0e6709eD740Bc8f486fa6623bC0873b3
                 </div>
-        </div>
-    </div>
-
-    <div id="v-leader" class="hidden space-y-3">
-        <h4 class="text-[10px] font-black text-slate-500 uppercase">Top Verified Nodes</h4>
-        <div id="leader-list" class="space-y-2">
+                <input type="text" id="kyc-hash" placeholder="Enter TxID Hash" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-xs outline-none focus:border-sky-500">
+                <button onclick="submitKYC()" class="w-full btn-prime py-4 rounded-xl text-[10px] font-black uppercase">Validate Node</button>
             </div>
-    </div>
-
-    <div id="v-support" class="hidden space-y-4">
-        <div class="stat-card bg-sky-500/5 border-sky-500/20">
-            <p class="text-xs font-bold mb-2">Open Support Ticket</p>
-            <textarea id="sup-msg" placeholder="Describe your issue..." class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs h-24 outline-none"></textarea>
-            <button onclick="sendTicket()" class="w-full mt-2 bg-sky-500 py-3 rounded-xl text-[10px] font-black uppercase">Submit Request</button>
         </div>
-        <div id="ticket-history" class="space-y-2">
-            <p class="text-[8px] text-slate-500 font-bold uppercase">Your Ticket Status</p>
-            </div>
-    </div>
+
+        <div id="tab-mgt" class="hidden space-y-4">
+            <h2 class="text-[10px] font-black text-red-500 uppercase px-2">Pending Node Verifications</h2>
+            <div id="admin-kyc-list" class="space-y-2"></div>
+        </div>
+
+    </main>
 
     <script>
-        const API = 'https://script.google.com/macros/s/AKfycbycO3WbrAycpHFSCPWP2jTfZ_2_c8p47ugbgN1mg3JhcqHIsZaFd6jf9zBsTRP7eeuU/exec';
+        const API = "https://script.google.com/macros/s/AKfycbwzJFT4ZYDvT2TEuo-3TPUIyNOCUMtCHiMRE7qutU-rd08ZIPFMfSXCULNENPB9OM9r/exec";
         const urlParams = new URLSearchParams(window.location.search);
-        const userUid = urlParams.get('uid');
+        const user = {
+            uid: urlParams.get('uid') || "NODE-881",
+            username: urlParams.get('username') || "Member"
+        };
 
-        async function loadExplorer() {
-            try {
-                const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'getExplorerStats' }) })).json();
-                document.getElementById('n-total').innerText = res.totalMined.toFixed(2);
-                document.getElementById('n-users').innerText = res.activeUsers;
+        const isAdmin = (user.username === "adminRida");
+        let activeChatUser = "ADMIN";
+        let blockCounter = 91204;
+
+        window.onload = () => {
+            if(isAdmin) {
+                document.getElementById('btn-mgt').classList.remove('hidden');
+                document.getElementById('role-tag').innerText = "NETWORK OVERSEER";
+                document.getElementById('role-tag').classList.add('text-red-500');
+            }
+            init();
+        };
+
+        function init() {
+            setInterval(genLedger, 3000); 
+            checkKYC();
+            if(isAdmin) loadAdminMgt();
+            setInterval(() => { if(!document.getElementById('tab-chat').classList.contains('hidden')) loadChat(); }, 5000);
+        }
+
+        // --- REAL-FEEL LEDGER ---
+        function genLedger() {
+            const box = document.getElementById('ledger-box');
+            document.getElementById('block-num').innerText = blockCounter++;
+            
+            const isSequel = Math.random() > 0.75;
+            let html = "";
+
+            if(isSequel) {
+                html = `<div class="p-2 text-center text-[7px] font-black uppercase tracking-[0.3em] text-white/10">--- BLOCK VALIDATED BY 0x${Math.floor(Math.random()*999)} ---</div>`;
+            } else {
+                html = `<div class="glass p-4 rounded-2xl tx-card flex justify-between items-center border-l-2 border-sky-500/50">
+                    <div>
+                        <p class="text-[9px] font-black">RIDA-${Math.floor(1000+Math.random()*9000)} <i class="fas fa-link mx-1 opacity-20"></i> RIDA-${Math.floor(1000+Math.random()*9000)}</p>
+                        <p class="text-[7px] opacity-20 font-mono">0x${Math.random().toString(16).slice(2,12)}</p>
+                    </div>
+                    <p class="text-[11px] font-black text-green-400">+${(Math.random()*250+5).toFixed(2)}</p>
+                </div>`;
+            }
+
+            box.insertAdjacentHTML('afterbegin', html);
+            if(box.children.length > 10) box.removeChild(box.lastChild);
+        }
+
+        // --- CHAT SYSTEM (FIXED BIDIRECTIONAL) ---
+        async function loadChat() {
+            const payload = { 
+                action: 'getMessages', 
+                uid: user.uid, 
+                username: user.username,
+                targetUser: isAdmin ? activeChatUser : "ADMIN"
+            };
+
+            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify(payload) })).json();
+            if (res.success) {
+                const win = document.getElementById('chat-win');
                 
-                // Leaderboard
-                document.getElementById('leader-list').innerHTML = res.topUsers.map((u, i) => `
-                    <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
-                        <span class="text-xs font-bold text-slate-400">#${i+1} ${u.uid}</span>
-                        <span class="text-xs font-black text-sky-400">${u.balance.toFixed(2)} RIDA</span>
-                    </div>
-                `).join('');
+                if(isAdmin) {
+                    document.getElementById('admin-selector').classList.remove('hidden');
+                    const users = [...new Set(res.data.filter(m => m[4] === "ADMIN").map(m => m[1]))];
+                    document.getElementById('inbox-list').innerHTML = users.map(u => `
+                        <button onclick="setChatUser('${u}')" class="shrink-0 px-4 py-2 rounded-xl bg-white/10 border ${activeChatUser === u ? 'border-sky-500 text-sky-400' : 'border-white/10'} text-[9px] font-black uppercase">${u}</button>
+                    `).join('') || '<p class="text-[7px] opacity-20 px-2">No active tickets</p>';
+                }
 
-                // Live Activity
-                document.getElementById('live-ledger').innerHTML = res.recentLogs.map(l => `
-                    <div class="flex justify-between"><span>${l.type}</span> <span class="text-sky-500/50">${l.time}</span></div>
-                `).join('');
-            } catch(e) {}
+                const messages = isAdmin 
+                    ? res.data.filter(m => (m[1] === activeChatUser && m[4] === user.uid) || (m[1] === user.uid && m[4] === activeChatUser))
+                    : res.data.filter(m => (m[1] === user.uid && m[4] === "ADMIN") || (m[4] === user.uid));
+                
+                if(messages.length > 0) {
+                    win.innerHTML = messages.map(m => `
+                        <div class="flex ${m[1] === user.uid ? 'justify-end' : 'justify-start'}">
+                            <div class="max-w-[85%] px-4 py-3 rounded-2xl ${m[1] === user.uid ? 'btn-prime' : 'bg-white/10 border border-white/5'}">
+                                <p class="text-[7px] font-black mb-1 opacity-50 uppercase">${m[2]}</p>
+                                <p class="text-xs font-medium">${m[3]}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                    win.scrollTop = win.scrollHeight;
+                }
+            }
         }
 
-        async function sendTicket() {
-            const msg = document.getElementById('sup-msg').value;
+        async function sendChat() {
+            const input = document.getElementById('chat-msg');
+            const msg = input.value.trim();
             if(!msg) return;
-            await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'submitTicket', uid: userUid, message: msg }) });
-            document.getElementById('sup-msg').value = '';
-            alert("Ticket Submitted. Check history for updates.");
-            loadTickets();
+
+            await fetch(API, { method: 'POST', body: JSON.stringify({
+                action: 'sendMessage', uid: user.uid, username: user.username, message: msg, target: isAdmin ? activeChatUser : "ADMIN"
+            }) });
+            input.value = "";
+            loadChat();
         }
 
-        async function loadTickets() {
-            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'getTickets', uid: userUid }) })).json();
-            document.getElementById('ticket-history').innerHTML = res.data.map(t => `
-                <div class="stat-card">
-                    <div class="flex justify-between text-[8px] mb-1">
-                        <span class="text-sky-500 uppercase">${t.status}</span>
-                        <span>${t.date}</span>
+        function setChatUser(uid) { activeChatUser = uid; loadChat(); }
+
+        // --- KYC & ADMIN ---
+        async function checkKYC() {
+            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'getKYCStatus', uid: user.uid }) })).json();
+            const badge = document.getElementById('kyc-badge');
+            badge.innerText = res.data;
+            badge.className = `px-3 py-1 rounded-full text-[8px] font-black border uppercase ${res.data === 'Verified' ? 'text-green-500 border-green-500/30' : 'text-amber-500 border-amber-500/30'}`;
+        }
+
+        async function submitKYC() {
+            const hash = document.getElementById('kyc-hash').value;
+            if(!hash) return;
+            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'submitKYC', uid: user.uid, username: user.username, txHash: hash }) })).json();
+            alert(res.msg);
+            checkKYC();
+        }
+
+        async function loadAdminMgt() {
+            const res = await (await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'adminGetAll', username: user.username }) })).json();
+            if(res.success) {
+                document.getElementById('admin-kyc-list').innerHTML = res.data.kyc.filter(k => k[4] === 'Pending').map(k => `
+                    <div class="glass p-4 rounded-2xl flex justify-between items-center">
+                        <div class="text-[10px] font-black"><p>${k[2]}</p><p class="opacity-20 text-[7px] font-mono">${k[3].substring(0,20)}...</p></div>
+                        <button onclick="approveKYC('${k[1]}')" class="bg-green-600 px-4 py-2 rounded-xl text-[8px] font-black uppercase">Approve</button>
                     </div>
-                    <p class="text-[10px] text-slate-300">${t.msg}</p>
-                    ${t.reply ? `<div class="mt-2 pt-2 border-t border-white/5 text-[10px] text-sky-400">Admin: ${t.reply}</div>` : ''}
-                </div>
-            `).join('');
+                `).join('') || '<p class="text-center py-4 opacity-20 text-[9px]">All nodes verified</p>';
+            }
         }
 
-        function tab(t) {
-            ['stats','leader','support'].forEach(v => {
-                document.getElementById('v-'+v).classList.add('hidden');
-                document.getElementById('t-'+v).classList.remove('tab-active');
+        async function approveKYC(tUid) {
+            await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'adminApproveKYC', username: user.username, targetUid: tUid }) });
+            loadAdminMgt();
+        }
+
+        function showTab(t) {
+            ['ledger','chat','kyc','mgt'].forEach(tab => {
+                document.getElementById('tab-'+tab).classList.add('hidden');
+                document.getElementById('btn-'+tab).classList.remove('active');
             });
-            document.getElementById('v-'+t).classList.remove('hidden');
-            document.getElementById('t-'+t).classList.add('tab-active');
-            if(t === 'support') loadTickets();
+            document.getElementById('tab-'+t).classList.remove('hidden');
+            document.getElementById('btn-'+t).classList.add('active');
+            if(t === 'chat') loadChat();
+            if(t === 'mgt') loadAdminMgt();
         }
-
-        loadExplorer();
     </script>
 </body>
 </html>
